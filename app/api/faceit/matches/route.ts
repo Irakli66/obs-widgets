@@ -1,29 +1,69 @@
+import { match } from "assert";
 import { NextResponse } from "next/server";
 
-export async function GET() {
-  const FACEIT_ID = "88096b5d-6ce5-429e-9c15-8793cba9d969";
-  const FACEIT_API_KEY = process.env.FACEIT_API_KEY; // secure in .env.local
+const FACEIT_ID = "88096b5d-6ce5-429e-9c15-8793cba9d969"; // your player_id
+const API_KEY = process.env.FACEIT_API_KEY;
 
+export async function GET() {
   try {
-    const res = await fetch(
-      `https://open.faceit.com/data/v4/players/${FACEIT_ID}/history`,
+    const historyRes = await fetch(
+      `https://open.faceit.com/data/v4/players/${FACEIT_ID}/games/cs2/stats?limit=30`,
       {
         headers: {
-          Authorization: `Bearer ${FACEIT_API_KEY}`,
+          Authorization: `Bearer ${API_KEY}`,
         },
       }
     );
 
-    if (!res.ok) {
+    if (!historyRes.ok) {
       return NextResponse.json(
-        { error: "Failed to fetch data" },
+        { error: "History fetch failed" },
         { status: 500 }
       );
     }
 
-    const data = await res.json();
-    return NextResponse.json(data);
+    const historyData = await historyRes.json();
+    const matchIds = historyData.items.map((item: any) => item.match_id);
+
+    let kills = 0;
+    let deaths = 0;
+    let assists = 0;
+    let hspercent = 0;
+    let wins = 0;
+    let elo = 0;
+
+    for (const match of historyData.items) {
+      kills += parseInt(match.stats["Kills"]);
+      deaths += parseInt(match.stats["Deaths"]);
+      assists += parseInt(match.stats["Assists"]);
+      elo += parseInt(match.stats["Elo"]);
+      hspercent += parseFloat(match.stats["Headshots %"]);
+      if (match.stats["Result"] === "1") {
+        wins++;
+      }
+    }
+
+    const kd = kills / deaths;
+    const hsPercent = hspercent / 30;
+    const winRate = (wins / matchIds.length) * 100;
+
+    return NextResponse.json({
+      kd: kd.toFixed(2),
+      hsPercent: hsPercent.toFixed(0),
+      winRate: winRate.toFixed(0),
+      loses: matchIds.length - wins,
+      kills: kills,
+      deaths: deaths,
+      wins,
+      avAssists: (assists / 30).toFixed(0),
+      avKills: (kills / 30).toFixed(0),
+      avDeaths: (deaths / 30).toFixed(0),
+      elo: elo,
+      lastGameStas: historyData.items[0].stats,
+      matchCount: matchIds.length,
+    });
   } catch (err) {
+    console.error(err);
     return NextResponse.json({ error: "Request failed" }, { status: 500 });
   }
 }
