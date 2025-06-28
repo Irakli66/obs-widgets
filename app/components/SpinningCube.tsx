@@ -2,7 +2,7 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Text, Html } from "@react-three/drei";
+import { OrbitControls, Text } from "@react-three/drei";
 import { useRef, useState } from "react";
 import { Mesh } from "three";
 

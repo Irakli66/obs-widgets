@@ -1,8 +1,11 @@
-import { match } from "assert";
 import { NextResponse } from "next/server";
 
-const FACEIT_ID = "88096b5d-6ce5-429e-9c15-8793cba9d969"; // your player_id
+const FACEIT_ID = process.env.FACEIT_ID; // your player_id
 const API_KEY = process.env.FACEIT_API_KEY;
+
+type ItemType = {
+  match_id: string;
+};
 
 export async function GET() {
   try {
@@ -23,7 +26,7 @@ export async function GET() {
     }
 
     const historyData = await historyRes.json();
-    const matchIds = historyData.items.map((item: any) => item.match_id);
+    const matchIds = historyData.items.map((item: ItemType) => item.match_id);
 
     let kills = 0;
     let deaths = 0;

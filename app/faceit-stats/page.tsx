@@ -1,7 +1,7 @@
-import FaceitStats from "../components/faceit/FaceitStats";
+// import FaceitStats from "../components/faceit/FaceitStats";
 import FaceitStatsCompact from "../components/faceit/FaceitStatsCompact";
-import FaceitStatsL from "../components/faceit/FaceitStatsL";
-import FaceitStatsS from "../components/faceit/FaceitStatsS";
+// import FaceitStatsL from "../components/faceit/FaceitStatsL";
+// import FaceitStatsS from "../components/faceit/FaceitStatsS";
 
 export default function FaceitStatsPage() {
   return (

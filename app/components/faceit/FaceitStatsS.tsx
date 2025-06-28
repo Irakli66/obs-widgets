@@ -1,19 +1,9 @@
 "use client";
 
-import { m, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useRequest } from "@/lib/hooks/useRequest";
 import Image from "next/image";
-import { Separator } from "@/components/ui/separator";
-import {
-  Trophy,
-  Target,
-  Zap,
-  TrendingUp,
-  Skull,
-  TrendingDown,
-  Crosshair,
-  Shield,
-} from "lucide-react";
+import { Trophy, Target, Skull, Crosshair, Shield } from "lucide-react";
 
 import {
   FaceitPlayerData,
@@ -72,7 +62,7 @@ export default function FaceitStatsS() {
 
   const csData = playerData?.games.cs2 || playerData?.games.csgo;
   const isInitialLoading = playerLoading;
-  const isDataLoading = statsLoading || matchLoading;
+  // const isDataLoading = statsLoading || matchLoading;
   const hasError = playerError || statsError || matchError;
 
   const getSkillLevelGradient = (level: number) => {

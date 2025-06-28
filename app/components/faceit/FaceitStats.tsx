@@ -5,7 +5,6 @@ import { useRequest } from "@/lib/hooks/useRequest";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import {
-  Trophy,
   Target,
   Zap,
   TrendingUp,
@@ -46,19 +45,6 @@ const levelSvgs = {
   10: <Level10 />,
 };
 
-const SKILL_LEVEL_COLORS = {
-  1: "from-gray-600 to-gray-700",
-  2: "from-gray-500 to-gray-600",
-  3: "from-yellow-600 to-yellow-700",
-  4: "from-yellow-500 to-yellow-600",
-  5: "from-orange-500 to-orange-600",
-  6: "from-orange-400 to-orange-500",
-  7: "from-red-500 to-red-600",
-  8: "from-red-400 to-red-500",
-  9: "from-purple-500 to-purple-600",
-  10: "from-purple-400 to-red-500",
-} as const;
-
 export default function FaceitStats() {
   const {
     data: playerData,
@@ -97,15 +83,8 @@ export default function FaceitStats() {
 
   const csData = playerData?.games.cs2 || playerData?.games.csgo;
   const isInitialLoading = playerLoading;
-  const isDataLoading = statsLoading || matchLoading;
+  // const isDataLoading = statsLoading || matchLoading;
   const hasError = playerError || statsError || matchError;
-
-  const getSkillLevelGradient = (level: number) => {
-    return (
-      SKILL_LEVEL_COLORS[8 as keyof typeof SKILL_LEVEL_COLORS] ||
-      SKILL_LEVEL_COLORS[1]
-    );
-  };
 
   console.log(csData);
 

@@ -5,7 +5,6 @@ import { useRequest } from "@/lib/hooks/useRequest";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import {
-  Trophy,
   Target,
   Zap,
   TrendingUp,

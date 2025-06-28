@@ -20,7 +20,7 @@ export default function AceAnimationWidget() {
 
   // Trigger from keyboard shortcut (Ctrl + A)
   useEffect(() => {
-    const handleKeyDown = (e: any) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.key.toLowerCase() === "a") {
         e.preventDefault();
         triggerAnimation();
@@ -32,9 +32,6 @@ export default function AceAnimationWidget() {
   }, []);
 
   // Manual trigger button (for testing)
-  const handleClick = () => {
-    triggerAnimation();
-  };
 
   if (!show) {
     return null;

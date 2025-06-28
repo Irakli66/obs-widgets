@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const FACEIT_USERNAME = "ika--";
+  const FACEIT_USERNAME = process.env.FACEIT_USERNAME; // secure in .env.local
   const FACEIT_API_KEY = process.env.FACEIT_API_KEY; // secure in .env.local
 
   try {
@@ -23,7 +23,7 @@ export async function GET() {
 
     const data = await res.json();
     return NextResponse.json(data);
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: "Request failed" }, { status: 500 });
   }
 }

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const FACEIT_ID = "88096b5d-6ce5-429e-9c15-8793cba9d969";
+  const FACEIT_ID = process.env.FACEIT_ID; // your player_id
   const FACEIT_API_KEY = process.env.FACEIT_API_KEY; // secure in .env.local
 
   try {
@@ -23,7 +23,7 @@ export async function GET() {
 
     const data = await res.json();
     return NextResponse.json(data);
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: "Request failed" }, { status: 500 });
   }
 }
