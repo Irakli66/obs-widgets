@@ -189,7 +189,7 @@ export default function TyniteNavigation() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black relative overflow-hidden">
+    <div className="md:min-h-screen max-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black relative overflow-y-auto md:overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
