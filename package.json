@@ -22,7 +22,8 @@
     "react-dom": "^19.0.0",
     "swr": "^2.3.3",
     "tailwind-merge": "^3.3.1",
-    "three": "^0.177.0"
+    "three": "^0.177.0",
+    "tmi.js": "^1.8.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -31,6 +32,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.177.0",
+    "@types/tmi.js": "^1.8.6",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
     "tailwindcss": "^4",
