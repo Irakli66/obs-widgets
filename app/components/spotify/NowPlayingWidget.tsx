@@ -64,7 +64,7 @@ export default function NowPlayingWidget() {
     return (
       <div className="bg-gray-900 rounded-lg p-4 text-white">
         <div className="text-center">
-          <p className="mb-2">Connect Spotify to show now playing</p>
+          <p className="mb-2">Connect Spotify to show now playing!</p>
           <button
             onClick={handleSpotifyLogin}
             className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md text-white font-medium"
