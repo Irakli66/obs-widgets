@@ -92,7 +92,7 @@ export default function FaceitStatsS() {
       <div className="w-full max-w-md mx-auto bg-black/90 backdrop-blur-lg border-2 border-red-500/70 rounded-2xl p-4 shadow-2xl">
         <div className="flex items-center justify-center h-16">
           <span className="text-red-400 font-bold text-sm">
-            FACEIT Connection Failed
+            FACEIT Connection Failed!
           </span>
         </div>
       </div>
