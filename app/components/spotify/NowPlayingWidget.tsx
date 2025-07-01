@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Pause, ExternalLink, Music, Loader2, Volume2 } from "lucide-react";
+import Image from "next/image";
 
 interface NowPlayingData {
   isPlaying: boolean;
@@ -85,10 +86,10 @@ export default function NowPlayingWidget() {
     window.location.href = "/api/auth/spotify";
   };
 
-  const progressPercentage =
-    progressMs && durationMs
-      ? Math.min((progressMs / durationMs) * 100, 100)
-      : 0;
+  // const progressPercentage =
+  //   progressMs && durationMs
+  //     ? Math.min((progressMs / durationMs) * 100, 100)
+  //     : 0;
 
   const formatTime = (ms: number) => {
     const minutes = Math.floor(ms / 60000);
@@ -144,7 +145,7 @@ export default function NowPlayingWidget() {
           </motion.div>
           <h3 className="text-white text-lg font-bold mb-2">Connect Spotify</h3>
           <p className="text-gray-400 text-sm mb-6 leading-relaxed">
-            Link your Spotify account to display what you're listening to
+            Link your Spotify account to display what you are listening to
           </p>
           <motion.button
             onClick={handleSpotifyLogin}
@@ -230,7 +231,7 @@ export default function NowPlayingWidget() {
           >
             <Volume2 className="w-4 h-4 text-purple-400" />
             <div className="flex gap-1">
-              {[0, 1, 2].map((i) => (
+              {/* {[0, 1, 2].map((i) => (
                 <motion.div
                   key={i}
                   className="w-1 bg-gradient-to-t from-purple-500 to-cyan-400 rounded-full"
@@ -244,7 +245,7 @@ export default function NowPlayingWidget() {
                     delay: i * 0.2,
                   }}
                 />
-              ))}
+              ))} */}
             </div>
           </motion.div>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 text-xs font-bold tracking-wider uppercase">
@@ -270,9 +271,10 @@ export default function NowPlayingWidget() {
                   exit={{ opacity: 0, scale: 0.9 }}
                   className="relative w-full h-full"
                 >
-                  <img
+                  <Image
                     src={nowPlaying.albumImageUrl}
                     alt="Album cover"
+                    fill
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
@@ -305,7 +307,6 @@ export default function NowPlayingWidget() {
           >
             <motion.h3
               className="text-white text-lg font-bold mb-1 truncate"
-              key={nowPlaying.title}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
             >
@@ -314,7 +315,6 @@ export default function NowPlayingWidget() {
 
             <motion.p
               className="text-gray-300 text-sm mb-1 truncate"
-              key={nowPlaying.artist}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
