@@ -22,7 +22,6 @@ export default function TopBar() {
     startedAt: null as Date | null,
     title: "",
     game: "",
-    bitrate: "6000 kbps",
     fps: "60 FPS",
   });
 
@@ -231,16 +230,6 @@ export default function TopBar() {
         </div>
 
         {/* Connection Status */}
-        <motion.div
-          className="flex items-center gap-2 bg-emerald-500/20 px-2 py-1 rounded-lg border border-emerald-500/30"
-          animate={{ opacity: [0.7, 1, 0.7] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <Wifi className="w-3 h-3 text-emerald-400" />
-          <span className="text-emerald-300 text-xs font-semibold">
-            {streamData.bitrate}
-          </span>
-        </motion.div>
 
         {/* Date & Time */}
         <div className="text-right">
