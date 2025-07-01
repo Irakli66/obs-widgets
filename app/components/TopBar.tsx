@@ -159,10 +159,10 @@ export default function TopBar() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="w-full relative flex items-center justify-between px-4 py-2 bg-gradient-to-r from-gray-900/98 via-gray-800/98 to-gray-900/98 backdrop-blur-md border-b border-gray-700/30 shadow-2xl"
+      className="w-full relative flex items-center justify-between px-4 py-2 bg-gradient-to-r from-slate-900/95 via-purple-900/95 to-slate-900/95 backdrop-blur-md border-b border-purple-500/20 shadow-2xl"
     >
       {/* Animated background overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-blue-500/5 to-cyan-500/5 animate-pulse" />
+      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-cyan-500/10 animate-pulse" />
 
       {/* Left Section - Brand & Live Status */}
       <div className="flex items-center gap-4 z-10">
@@ -171,7 +171,7 @@ export default function TopBar() {
           whileHover={{ scale: 1.05 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
-          <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+          <div className="w-8 h-8 bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-500 rounded-lg flex items-center justify-center shadow-lg shadow-purple-500/25">
             <span className="text-white font-bold text-sm">T</span>
           </div>
           <h2 className="text-white text-sm font-bold tracking-wide">TYNITE</h2>
@@ -182,14 +182,14 @@ export default function TopBar() {
           className={`flex items-center gap-2 px-3 py-1 rounded-full ${
             streamData.isLive
               ? "bg-red-500/20 border border-red-500/40"
-              : "bg-gray-600/20 border border-gray-600/40"
+              : "bg-purple-600/20 border border-purple-600/40"
           }`}
           animate={streamData.isLive ? { scale: [1, 1.02, 1] } : {}}
           transition={{ duration: 2, repeat: Infinity }}
         >
           <div
             className={`w-2 h-2 rounded-full ${
-              streamData.isLive ? "bg-red-500" : "bg-gray-500"
+              streamData.isLive ? "bg-red-500" : "bg-purple-400"
             } ${streamData.isLive ? "animate-pulse" : ""}`}
           />
           <span className="text-white text-xs font-semibold">
@@ -201,8 +201,8 @@ export default function TopBar() {
       {/* Center Section - Stream Stats */}
       <div className="flex items-center gap-6 z-10">
         <motion.div
-          className="flex items-center gap-2 bg-black/30 px-3 py-1 rounded-lg backdrop-blur-sm"
-          whileHover={{ scale: 1.05, backgroundColor: "rgba(0,0,0,0.5)" }}
+          className="flex items-center gap-2 bg-black/40 px-3 py-1 rounded-lg backdrop-blur-sm border border-white/10"
+          whileHover={{ scale: 1.05, backgroundColor: "rgba(0,0,0,0.6)" }}
         >
           <Eye className="w-3 h-3 text-blue-400" />
           <span className="text-white text-xs font-semibold">
@@ -211,8 +211,8 @@ export default function TopBar() {
         </motion.div>
 
         <motion.div
-          className="flex items-center gap-2 bg-black/30 px-3 py-1 rounded-lg backdrop-blur-sm"
-          whileHover={{ scale: 1.05, backgroundColor: "rgba(0,0,0,0.5)" }}
+          className="flex items-center gap-2 bg-black/40 px-3 py-1 rounded-lg backdrop-blur-sm border border-white/10"
+          whileHover={{ scale: 1.05, backgroundColor: "rgba(0,0,0,0.6)" }}
         >
           <Users className="w-3 h-3 text-green-400" />
           <span className="text-white text-xs font-semibold">
@@ -221,8 +221,8 @@ export default function TopBar() {
         </motion.div>
 
         <motion.div
-          className="flex items-center gap-2 bg-black/30 px-3 py-1 rounded-lg backdrop-blur-sm"
-          whileHover={{ scale: 1.05, backgroundColor: "rgba(0,0,0,0.5)" }}
+          className="flex items-center gap-2 bg-black/40 px-3 py-1 rounded-lg backdrop-blur-sm border border-white/10"
+          whileHover={{ scale: 1.05, backgroundColor: "rgba(0,0,0,0.6)" }}
         >
           <Clock className="w-3 h-3 text-yellow-400" />
           <span className="text-white text-xs font-semibold">
@@ -236,8 +236,8 @@ export default function TopBar() {
         {/* Social Links */}
         <div className="flex items-center gap-3">
           <motion.div
-            className="flex items-center gap-2 bg-black/30 px-2 py-1 rounded-lg backdrop-blur-sm"
-            whileHover={{ scale: 1.1, backgroundColor: "rgba(0,0,0,0.5)" }}
+            className="flex items-center gap-2 bg-black/40 px-2 py-1 rounded-lg backdrop-blur-sm border border-white/10"
+            whileHover={{ scale: 1.1, backgroundColor: "rgba(0,0,0,0.6)" }}
             whileTap={{ scale: 0.95 }}
           >
             <XIcon className="w-3 h-3 text-white" />
@@ -245,7 +245,7 @@ export default function TopBar() {
           </motion.div>
 
           <motion.div
-            className="flex items-center gap-2 bg-black/30 px-2 py-1 rounded-lg backdrop-blur-sm"
+            className="flex items-center gap-2 bg-black/40 px-2 py-1 rounded-lg backdrop-blur-sm border border-white/10"
             whileHover={{ scale: 1.1, backgroundColor: "rgba(255,0,0,0.1)" }}
             whileTap={{ scale: 0.95 }}
           >
@@ -269,7 +269,7 @@ export default function TopBar() {
         {/* Date & Time */}
         <div className="text-right">
           <div className="text-white text-xs font-bold">{formattedTime}</div>
-          <div className="text-gray-300 text-xs">{formattedDate}</div>
+          <div className="text-purple-300 text-xs">{formattedDate}</div>
         </div>
       </div>
 
