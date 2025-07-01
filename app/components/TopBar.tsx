@@ -11,13 +11,6 @@ import {
   Clock,
 } from "lucide-react";
 
-// Twitch API configuration
-const TWITCH_CLIENT_ID =
-  process.env.NEXT_PUBLIC_TWITCH_CLIENT_ID || "your_client_id_here";
-const TWITCH_ACCESS_TOKEN =
-  process.env.NEXT_PUBLIC_TWITCH_ACCESS_TOKEN || "your_access_token_here";
-const TWITCH_USERNAME = process.env.TWITCH_USERNAME; // Your Twitch username
-
 export default function TopBar() {
   const [time, setTime] = useState(new Date());
   const [streamData, setStreamData] = useState({
@@ -35,53 +28,22 @@ export default function TopBar() {
   // Fetch Twitch data
   const fetchTwitchData = async () => {
     try {
-      const headers = {
-        "Client-ID": TWITCH_CLIENT_ID,
-        Authorization: `Bearer ${TWITCH_ACCESS_TOKEN}`,
-      };
+      const res = await fetch("/api/twitch");
+      const data = await res.json();
 
-      // Get user ID first
-      const userResponse = await fetch(
-        `https://api.twitch.tv/helix/users?login=${TWITCH_USERNAME}`,
-        {
-          headers,
-        }
-      );
-      const userData = await userResponse.json();
-      const userId = userData.data[0]?.id;
-
-      if (!userId) return;
-
-      // Get stream data
-      const streamResponse = await fetch(
-        `https://api.twitch.tv/helix/streams?user_id=${userId}`,
-        {
-          headers,
-        }
-      );
-      const streamData = await streamResponse.json();
-      const stream = streamData.data[0];
-
-      // Get follower count
-      const followersResponse = await fetch(
-        `https://api.twitch.tv/helix/channels/followers?broadcaster_id=${userId}`,
-        {
-          headers,
-        }
-      );
-      const followersData = await followersResponse.json();
+      const stream = data.stream;
 
       setStreamData((prev) => ({
         ...prev,
         isLive: !!stream,
         viewers: stream?.viewer_count || 0,
-        followers: followersData.total || prev.followers,
+        followers: data.followers || 0,
         startedAt: stream?.started_at ? new Date(stream.started_at) : null,
         title: stream?.title || "",
         game: stream?.game_name || "",
       }));
-    } catch (error) {
-      console.error("Error fetching Twitch data:", error);
+    } catch (err) {
+      console.error("Failed to fetch Twitch data", err);
     }
   };
 
