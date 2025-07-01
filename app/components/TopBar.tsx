@@ -10,6 +10,7 @@ import {
   //   MessageCircle,
   Clock,
 } from "lucide-react";
+import Image from "next/image";
 
 export default function TopBar() {
   const [time, setTime] = useState(new Date());
@@ -212,6 +213,19 @@ export default function TopBar() {
             whileTap={{ scale: 0.95 }}
           >
             <Youtube className="w-3 h-3 text-red-500" />
+            <span className="text-white text-xs font-semibold">tynite</span>
+          </motion.div>
+          <motion.div
+            className="flex items-center gap-2 bg-black/40 px-2 py-1 rounded-lg backdrop-blur-sm border border-white/10"
+            whileHover={{ scale: 1.1, backgroundColor: "rgba(0,255,0,0.1)" }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Image
+              src="/images/kickLogo.png"
+              width={12}
+              height={12}
+              alt="kick logo"
+            />
             <span className="text-white text-xs font-semibold">tynite</span>
           </motion.div>
         </div>
