@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { SVGProps, useState, useEffect } from "react";
 import {
   Youtube,
-  Wifi,
   Users,
   Eye,
   //   Heart,
