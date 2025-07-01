@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getTokens } from "../../../../../lib/spotify";
 
 export async function GET(request: NextRequest) {
@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get("code");
 
   if (!code) {
-    return Response.json(
+    return NextResponse.json(
       { error: "Authorization code not provided" },
       { status: 400 }
     );
@@ -16,31 +16,34 @@ export async function GET(request: NextRequest) {
     const tokens = await getTokens(code);
 
     if (tokens.error) {
-      return Response.json({ error: tokens.error }, { status: 400 });
+      return NextResponse.json({ error: tokens.error }, { status: 400 });
     }
 
-    // Create response with redirect
-    const response = Response.redirect(new URL("/", request.url));
+    // ✅ Use NextResponse so we can set cookies
+    const response = NextResponse.redirect(new URL("/", request.url));
 
-    // Set cookies
-    response.headers.set(
-      "Set-Cookie",
-      [
-        `spotify_access_token=${tokens.access_token}; HttpOnly; Secure; SameSite=Strict; Max-Age=3600; Path=/`,
-        `spotify_refresh_token=${tokens.refresh_token}; HttpOnly; Secure; SameSite=Strict; Max-Age=2592000; Path=/`,
-      ].join(", ")
-    );
+    response.cookies.set("spotify_access_token", tokens.access_token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: 3600, // 1 hour
+      path: "/",
+    });
+
+    response.cookies.set("spotify_refresh_token", tokens.refresh_token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+      path: "/",
+    });
 
     return response;
   } catch (error) {
     console.error("[Spotify Callback] Error getting tokens:", error);
-    let details: string;
-    if (error instanceof Error) {
-      details = error.message;
-    } else {
-      details = String(error);
-    }
-    return Response.json(
+    const details = error instanceof Error ? error.message : String(error);
+
+    return NextResponse.json(
       { error: "Failed to get access token", details },
       { status: 500 }
     );
