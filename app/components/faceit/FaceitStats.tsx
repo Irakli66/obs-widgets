@@ -86,8 +86,6 @@ export default function FaceitStats() {
   // const isDataLoading = statsLoading || matchLoading;
   const hasError = playerError || statsError || matchError;
 
-  console.log(csData);
-
   const lastGameStats = matchData?.lastGameStas;
 
   const statDisplay = [

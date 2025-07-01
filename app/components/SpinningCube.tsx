@@ -192,7 +192,6 @@ const NavigationCard = ({ item, index, onNavigate }: NavigationCardProps) => {
 export default function TyniteNavigation() {
   const router = useRouter();
   const handleNavigation = (route: string) => {
-    console.log(`Navigating to: ${route}`);
     router.push(route);
     // Replace with actual navigation logic
     // router.push(route);
