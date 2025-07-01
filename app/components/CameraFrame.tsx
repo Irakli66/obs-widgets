@@ -1,8 +1,8 @@
 const CameraFrame = () => {
   return (
     <div className="w-full h-screen bg-transparent flex items-center justify-center">
-      <div className="relative w-[417px] h-[288px] ">
-        {/* SVG Frame - Works perfectly in OBS */}
+      <div className="relative w-[417px] h-[288px]">
+        {/* SVG Frame - Professional styling to match TopBar */}
         <svg
           width="100%"
           height="100%"
@@ -10,144 +10,176 @@ const CameraFrame = () => {
           className="absolute inset-0"
         >
           <defs>
-            {/* Animated gradient for glow effect */}
-            <linearGradient id="neonGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#00ffff">
+            {/* Professional gradient matching TopBar theme */}
+            <linearGradient
+              id="professionalGradient"
+              x1="0%"
+              y1="0%"
+              x2="100%"
+              y2="0%"
+            >
+              <stop offset="0%" stopColor="#8b5cf6">
                 <animate
                   attributeName="stop-color"
-                  values="#00ffff;#0080ff;#00ccff;#00ffff"
-                  dur="2s"
+                  values="#8b5cf6;#3b82f6;#06b6d4;#8b5cf6"
+                  dur="4s"
                   repeatCount="indefinite"
                 />
               </stop>
-              <stop offset="50%" stopColor="#0080ff">
+              <stop offset="50%" stopColor="#3b82f6">
                 <animate
                   attributeName="stop-color"
-                  values="#0080ff;#00ccff;#00ffff;#0080ff"
-                  dur="2s"
+                  values="#3b82f6;#06b6d4;#8b5cf6;#3b82f6"
+                  dur="4s"
                   repeatCount="indefinite"
                 />
               </stop>
-              <stop offset="100%" stopColor="#00ccff">
+              <stop offset="100%" stopColor="#06b6d4">
                 <animate
                   attributeName="stop-color"
-                  values="#00ccff;#00ffff;#0080ff;#00ccff"
-                  dur="2s"
+                  values="#06b6d4;#8b5cf6;#3b82f6;#06b6d4"
+                  dur="4s"
                   repeatCount="indefinite"
                 />
               </stop>
             </linearGradient>
 
-            {/* Filter for glow effect */}
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+            {/* Subtle glow filter */}
+            <filter id="subtleGlow">
+              <feGaussianBlur stdDeviation="2" result="coloredBlur" />
               <feMerge>
                 <feMergeNode in="coloredBlur" />
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
+
+            {/* Drop shadow filter */}
+            <filter id="dropShadow">
+              <feDropShadow
+                dx="0"
+                dy="0"
+                stdDeviation="4"
+                floodColor="#8b5cf6"
+                floodOpacity="0.3"
+              />
+            </filter>
           </defs>
 
-          {/* Outer glow layers */}
+          {/* Main frame with professional styling */}
           <rect
-            x="2"
-            y="2"
-            width="380"
-            height="252"
+            x="8"
+            y="8"
+            width="368"
+            height="240"
             fill="none"
-            stroke="url(#neonGradient)"
-            strokeWidth="6"
+            stroke="url(#professionalGradient)"
+            strokeWidth="2"
             rx="8"
-            opacity="0.3"
-            filter="url(#glow)"
+            opacity="0.9"
+            filter="url(#subtleGlow)"
           />
 
-          <rect
-            x="4"
-            y="4"
-            width="376"
-            height="248"
-            fill="none"
-            stroke="url(#neonGradient)"
-            strokeWidth="4"
-            rx="6"
-            opacity="0.6"
-          />
-
-          {/* Main frame */}
-          <rect
-            x="6"
-            y="6"
-            width="372"
-            height="244"
-            fill="none"
-            stroke="url(#neonGradient)"
-            strokeWidth="6"
-            rx="5"
-          />
-
-          {/* Inner frame */}
+          {/* Inner accent frame */}
           <rect
             x="12"
             y="12"
             width="360"
             height="232"
             fill="none"
-            stroke="url(#neonGradient)"
+            stroke="url(#professionalGradient)"
             strokeWidth="1"
-            rx="3"
-            opacity="0.7"
+            rx="6"
+            opacity="0.5"
           />
 
-          {/* Corner indicators */}
-          <g stroke="url(#neonGradient)" strokeWidth="2" fill="none">
+          {/* Corner brackets - sleek and minimal */}
+          <g
+            stroke="url(#professionalGradient)"
+            strokeWidth="2"
+            fill="none"
+            opacity="0.8"
+          >
             {/* Top-left */}
-            <path d="M 20 6 L 6 6 L 6 20">
+            <path d="M 24 8 L 8 8 L 8 24">
               <animate
                 attributeName="opacity"
-                values="0.5;1;0.5"
-                dur="1s"
+                values="0.4;0.8;0.4"
+                dur="2s"
                 repeatCount="indefinite"
               />
             </path>
 
             {/* Top-right */}
-            <path d="M 364 6 L 378 6 L 378 20">
+            <path d="M 360 8 L 376 8 L 376 24">
               <animate
                 attributeName="opacity"
-                values="0.5;1;0.5"
-                dur="1s"
-                begin="0.25s"
-                repeatCount="indefinite"
-              />
-            </path>
-
-            {/* Bottom-left */}
-            <path d="M 6 236 L 6 250 L 20 250">
-              <animate
-                attributeName="opacity"
-                values="0.5;1;0.5"
-                dur="1s"
+                values="0.4;0.8;0.4"
+                dur="2s"
                 begin="0.5s"
                 repeatCount="indefinite"
               />
             </path>
 
-            {/* Bottom-right */}
-            <path d="M 378 236 L 378 250 L 364 250">
+            {/* Bottom-left */}
+            <path d="M 8 232 L 8 248 L 24 248">
               <animate
                 attributeName="opacity"
-                values="0.5;1;0.5"
-                dur="1s"
-                begin="0.75s"
+                values="0.4;0.8;0.4"
+                dur="2s"
+                begin="1s"
+                repeatCount="indefinite"
+              />
+            </path>
+
+            {/* Bottom-right */}
+            <path d="M 376 232 L 376 248 L 360 248">
+              <animate
+                attributeName="opacity"
+                values="0.4;0.8;0.4"
+                dur="2s"
+                begin="1.5s"
                 repeatCount="indefinite"
               />
             </path>
           </g>
 
-          {/* Scanning line */}
+          {/* Subtle scanning line */}
+          <line
+            x1="8"
+            y1="128"
+            x2="376"
+            y2="128"
+            stroke="url(#professionalGradient)"
+            strokeWidth="0.5"
+            opacity="0.3"
+          >
+            <animateTransform
+              attributeName="transform"
+              type="translate"
+              values="0,-240;0,240;0,-240"
+              dur="8s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="opacity"
+              values="0;0.3;0"
+              dur="8s"
+              repeatCount="indefinite"
+            />
+          </line>
 
-          {/* Status indicators */}
+          {/* Professional frame border enhancement */}
+          <rect
+            x="6"
+            y="6"
+            width="372"
+            height="244"
+            fill="none"
+            stroke="rgba(139, 92, 246, 0.2)"
+            strokeWidth="1"
+            rx="10"
+            filter="url(#dropShadow)"
+          />
         </svg>
       </div>
     </div>
