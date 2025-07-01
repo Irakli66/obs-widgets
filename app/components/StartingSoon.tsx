@@ -17,7 +17,7 @@ type ChatMessage = {
 };
 
 export default function StartingSoon() {
-  const [countdown, setCountdown] = useState(300);
+  const [countdown, setCountdown] = useState(900);
   const [currentTime, setCurrentTime] = useState(new Date());
   //   const [animationPhase, setAnimationPhase] = useState(0);
   const [isClient, setIsClient] = useState(false);
