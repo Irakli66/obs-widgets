@@ -137,11 +137,11 @@ export default function FaceitStatsCompact() {
 
   if (isInitialLoading) {
     return (
-      <div className="w-full max-w-4xl mx-auto bg-gradient-to-r from-slate-900/95 to-slate-800/95 backdrop-blur-sm border border-slate-700/50 rounded-xl p-4">
+      <div className="w-full max-w-4xl mx-auto bg-gradient-to-r from-slate-900/95 via-purple-900/95 to-slate-900/95 backdrop-blur-sm border border-purple-500/20 rounded-xl p-4">
         <div className="flex items-center justify-center h-20">
           <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 bg-orange-500 rounded-full animate-pulse" />
-            <span className="text-slate-300 font-medium">
+            <div className="w-4 h-4 bg-purple-500 rounded-full animate-pulse" />
+            <span className="text-purple-300 font-medium">
               Loading FACEIT stats...
             </span>
           </div>
@@ -152,7 +152,7 @@ export default function FaceitStatsCompact() {
 
   if (hasError || !playerData) {
     return (
-      <div className="w-full max-w-4xl mx-auto bg-gradient-to-r from-red-900/20 to-slate-900/95 backdrop-blur-sm border border-red-500/30 rounded-xl p-4">
+      <div className="w-full max-w-4xl mx-auto bg-gradient-to-r from-red-900/20 via-purple-900/95 to-slate-900/95 backdrop-blur-sm border border-red-500/30 rounded-xl p-4">
         <div className="flex items-center justify-center h-20">
           <span className="text-red-400 font-medium">
             Failed to load FACEIT data
@@ -164,11 +164,11 @@ export default function FaceitStatsCompact() {
 
   if (matchLoading || statsLoading) {
     return (
-      <div className="w-full max-w-4xl mx-auto bg-gradient-to-r from-slate-900/95 to-slate-800/95 backdrop-blur-sm border border-slate-700/50 rounded-xl p-4">
+      <div className="w-full max-w-4xl mx-auto bg-gradient-to-r from-slate-900/95 via-purple-900/95 to-slate-900/95 backdrop-blur-sm border border-purple-500/20 rounded-xl p-4">
         <div className="flex items-center justify-center h-20">
           <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 bg-orange-500 rounded-full animate-pulse" />
-            <span className="text-slate-300 font-medium">
+            <div className="w-4 h-4 bg-purple-500 rounded-full animate-pulse" />
+            <span className="text-purple-300 font-medium">
               Loading FACEIT stats...
             </span>
           </div>
@@ -182,20 +182,23 @@ export default function FaceitStatsCompact() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="w-full relative max-w-xl mx-auto bg-gradient-to-r from-slate-900/95 to-slate-800/95 backdrop-blur-sm border border-slate-700/50 rounded-xl overflow-hidden"
+      className="w-full relative max-w-xl mx-auto bg-gradient-to-r from-slate-900/95 via-purple-900/95 to-slate-900/95 backdrop-blur-sm border border-purple-500/20 rounded-xl overflow-hidden"
     >
+      {/* Animated background overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-cyan-500/10 animate-pulse" />
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-gradient-to-r from-slate-900/95 to-slate-800/95 backdrop-blur-sm border border-slate-700/50 rounded-xl overflow-hidden"
+        className="relative z-10"
       >
         {/* Header Section */}
         <div className="flex items-center justify-between p-4 pb-3">
           {/* Avatar & Name */}
           <div className="flex items-center space-x-3">
             <div className="relative">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-500 p-0.5">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-500 p-0.5 shadow-lg shadow-purple-500/25">
                 <div className="w-full h-full rounded-full bg-slate-800 flex items-center justify-center">
                   {playerData.avatar ? (
                     <Image
@@ -206,7 +209,7 @@ export default function FaceitStatsCompact() {
                       className="rounded-full"
                     />
                   ) : (
-                    <span className="text-orange-400 font-bold text-lg">
+                    <span className="text-purple-400 font-bold text-lg">
                       {playerData.nickname.charAt(0).toUpperCase()}
                     </span>
                   )}
@@ -219,10 +222,10 @@ export default function FaceitStatsCompact() {
                 {playerData.nickname}
               </h2>
               <div className="text-center flex items-center gap-2">
-                <div className="text-lg font-bold text-orange-400">
+                <div className="text-lg font-bold text-purple-400">
                   {csData?.faceit_elo}
                 </div>
-                <div className="text-xs text-slate-400">ELO</div>
+                <div className="text-xs text-purple-300">ELO</div>
               </div>
             </div>
           </div>
@@ -253,7 +256,7 @@ export default function FaceitStatsCompact() {
           </div>
         </div>
 
-        <Separator className="bg-slate-700/50" />
+        <Separator className="bg-purple-500/20" />
 
         {/* Stats Section */}
         <div className="p-4 pt-3">
@@ -261,20 +264,20 @@ export default function FaceitStatsCompact() {
           <div className="flex">
             {statsData && (
               <div className="flex justify-between w-full">
-                <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700/30">
+                <div className="bg-black/40 rounded-lg p-3 border border-white/10 backdrop-blur-sm">
                   <div className="flex items-center space-x-2 mb-1">
                     <Target className="w-4 h-4 text-blue-400" />
-                    <span className="text-slate-400 text-sm">K/D Ratio</span>
+                    <span className="text-purple-300 text-sm">K/D Ratio</span>
                   </div>
                   <div className="text-xl font-bold text-white">
                     {matchData?.kd || statsData.lifetime["Average K/D Ratio"]}
                   </div>
                 </div>
 
-                <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700/30">
+                <div className="bg-black/40 rounded-lg p-3 border border-white/10 backdrop-blur-sm">
                   <div className="flex items-center space-x-2 mb-1">
                     <Skull className="w-4 h-4 text-red-400" />
-                    <span className="text-slate-400 text-sm">Headshots</span>
+                    <span className="text-purple-300 text-sm">Headshots</span>
                   </div>
                   <div className="text-xl font-bold text-white">
                     {matchData?.hsPercent ||
@@ -283,7 +286,7 @@ export default function FaceitStatsCompact() {
                   </div>
                 </div>
 
-                <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700/30">
+                <div className="bg-black/40 rounded-lg p-3 border border-white/10 backdrop-blur-sm">
                   <div className="flex items-center space-x-2 mb-1">
                     {matchData && Number(matchData.winRate) > 50 ? (
                       <TrendingUp className="w-4 h-4 text-green-400" />
@@ -291,14 +294,14 @@ export default function FaceitStatsCompact() {
                       <TrendingDown className="w-4 h-4 text-red-400" />
                     )}
 
-                    <span className="text-slate-400 text-sm">Win Rate</span>
+                    <span className="text-purple-300 text-sm">Win Rate</span>
                   </div>
                   <div className="text-xl font-bold text-white">
                     {matchData?.winRate || statsData.lifetime["Win Rate %"]}%
                   </div>
                 </div>
 
-                <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700/30">
+                <div className="bg-black/40 rounded-lg p-3 border border-white/10 backdrop-blur-sm">
                   <div className="flex items-center space-x-2 mb-1">
                     {Number(statsData.lifetime["Current Win Streak"]) > 3 ? (
                       <motion.div
@@ -317,7 +320,7 @@ export default function FaceitStatsCompact() {
                     ) : (
                       <Zap className="w-4 h-4 text-yellow-400" />
                     )}
-                    <span className="text-slate-400 text-sm">Win Streak</span>
+                    <span className="text-purple-300 text-sm">Win Streak</span>
                   </div>
                   <motion.div
                     className="text-xl font-bold text-white"
@@ -347,9 +350,9 @@ export default function FaceitStatsCompact() {
         </div>
 
         {/* ELO Progress Bar */}
-        {eloProgress && (
+        {/* {eloProgress && (
           <div className="px-4 pb-4">
-            <div className="relative h-1 bg-slate-700/50 rounded-full overflow-hidden">
+            <div className="relative h-1 bg-purple-900/50 rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${eloProgress.progress}%` }}
@@ -358,9 +361,8 @@ export default function FaceitStatsCompact() {
                   delay: 0.5,
                   ease: "easeOut",
                 }}
-                className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full relative"
+                className="h-full bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-400 rounded-full relative"
               >
-                {/* Animated shimmer effect */}
                 <motion.div
                   animate={{
                     x: [-100, 300],
@@ -376,7 +378,7 @@ export default function FaceitStatsCompact() {
               </motion.div>
             </div>
           </div>
-        )}
+        )} */}
       </motion.div>
     </motion.div>
   );
