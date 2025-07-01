@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTokens } from "../../../../../lib/spotify";
-import { saveSpotifyTokens } from "../../../../../lib/spotifyTokenStore";
-
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
@@ -21,10 +19,6 @@ export async function GET(request: NextRequest) {
     }
 
     // Save tokens to file for OBS/server-side use
-    saveSpotifyTokens({
-      access_token: tokens.access_token,
-      refresh_token: tokens.refresh_token,
-    });
 
     // ✅ Use NextResponse so we can set cookies
     const response = NextResponse.redirect(new URL("/", request.url));
