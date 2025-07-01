@@ -7,9 +7,14 @@ export async function GET() {
     let spotify_access_token = (await cookieStore).get(
       "spotify_access_token"
     )?.value;
-    const spotify_refresh_token = (await cookieStore).get(
+    let spotify_refresh_token = (await cookieStore).get(
       "spotify_refresh_token"
     )?.value;
+
+    // Fallback to env if no cookies (e.g., OBS or serverless)
+    if (!spotify_refresh_token && process.env.SPOTIFY_REFRESH_TOKEN) {
+      spotify_refresh_token = process.env.SPOTIFY_REFRESH_TOKEN;
+    }
 
     if (!spotify_refresh_token) {
       return Response.json({ error: "Not authenticated" }, { status: 401 });
