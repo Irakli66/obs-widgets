@@ -59,36 +59,36 @@ export const eloRanges = [
 ];
 
 // Helper function to calculate ELO progress
-const calculateEloProgress = (currentElo: number, skillLevel: number) => {
-  const currentRange = eloRanges.find((range) => range.level === skillLevel);
-  if (!currentRange)
-    return { progress: 0, currentElo, minElo: 0, maxElo: 0, nextLevelElo: 0 };
+// const calculateEloProgress = (currentElo: number, skillLevel: number) => {
+//   const currentRange = eloRanges.find((range) => range.level === skillLevel);
+//   if (!currentRange)
+//     return { progress: 0, currentElo, minElo: 0, maxElo: 0, nextLevelElo: 0 };
 
-  const nextRange = eloRanges.find((range) => range.level === skillLevel + 1);
-  const nextLevelElo = nextRange ? nextRange.min : currentRange.max;
+//   const nextRange = eloRanges.find((range) => range.level === skillLevel + 1);
+//   const nextLevelElo = nextRange ? nextRange.min : currentRange.max;
 
-  // For level 10, progress is based on how much above 2001 they are
-  if (skillLevel === 10) {
-    const progress = Math.min((currentElo - currentRange.min) / 500, 1); // Assuming 500 as a reasonable "full bar" above 2001
-    return {
-      progress: progress * 100,
-      currentElo,
-      minElo: currentRange.min,
-      maxElo: currentRange.max,
-      nextLevelElo: null,
-    };
-  }
+//   // For level 10, progress is based on how much above 2001 they are
+//   if (skillLevel === 10) {
+//     const progress = Math.min((currentElo - currentRange.min) / 500, 1); // Assuming 500 as a reasonable "full bar" above 2001
+//     return {
+//       progress: progress * 100,
+//       currentElo,
+//       minElo: currentRange.min,
+//       maxElo: currentRange.max,
+//       nextLevelElo: null,
+//     };
+//   }
 
-  const progress =
-    (currentElo - currentRange.min) / (nextLevelElo - currentRange.min);
-  return {
-    progress: Math.max(0, Math.min(progress * 100, 100)),
-    currentElo,
-    minElo: currentRange.min,
-    maxElo: nextLevelElo,
-    nextLevelElo,
-  };
-};
+//   const progress =
+//     (currentElo - currentRange.min) / (nextLevelElo - currentRange.min);
+//   return {
+//     progress: Math.max(0, Math.min(progress * 100, 100)),
+//     currentElo,
+//     minElo: currentRange.min,
+//     maxElo: nextLevelElo,
+//     nextLevelElo,
+//   };
+// };
 
 export default function FaceitStatsCompact() {
   const {
@@ -131,9 +131,9 @@ export default function FaceitStatsCompact() {
   const hasError = playerError || statsError || matchError;
 
   // Calculate ELO progress
-  const eloProgress = csData
-    ? calculateEloProgress(csData.faceit_elo, csData.skill_level)
-    : null;
+  // const eloProgress = csData
+  //   ? calculateEloProgress(csData.faceit_elo, csData.skill_level)
+  //   : null;
 
   if (isInitialLoading) {
     return (
