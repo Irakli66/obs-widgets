@@ -126,7 +126,7 @@ export default function NowPlayingWidget() {
           </motion.div>
           <h3 className="text-white text-lg font-bold mb-2">Connect Spotify</h3>
           <p className="text-gray-400 text-sm mb-4">
-            Link your Spotify account to display what you're listening to
+            Link your Spotify account to display what you are listening to
           </p>
           <motion.button
             onClick={handleSpotifyLogin}
