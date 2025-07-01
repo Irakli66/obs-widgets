@@ -37,8 +37,14 @@ export async function GET(request: NextRequest) {
     return response;
   } catch (error) {
     console.error("[Spotify Callback] Error getting tokens:", error);
+    let details: string;
+    if (error instanceof Error) {
+      details = error.message;
+    } else {
+      details = String(error);
+    }
     return Response.json(
-      { error: "Failed to get access token", details: (error as any)?.message || error },
+      { error: "Failed to get access token", details },
       { status: 500 }
     );
   }
