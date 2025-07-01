@@ -56,7 +56,7 @@ export default function NowPlayingWidget() {
 
   useEffect(() => {
     fetchNowPlaying();
-    const interval = setInterval(fetchNowPlaying, 30000); // Poll every 30s
+    const interval = setInterval(fetchNowPlaying, 7500); // Poll every 30s
     return () => clearInterval(interval);
   }, []);
 
