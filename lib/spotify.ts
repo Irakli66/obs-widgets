@@ -48,8 +48,6 @@ export const getAuthUrl = () => {
 };
 
 export const getTokens = async (code: string) => {
-  console.log("[getTokens] code:", code);
-  console.log("[getTokens] client_id:", client_id, "redirect_uri:", redirect_uri);
   const response = await fetch(TOKEN_ENDPOINT, {
     method: "POST",
     headers: {

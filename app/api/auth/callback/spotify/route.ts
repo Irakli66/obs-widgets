@@ -5,8 +5,6 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
 
-  console.log("[Spotify Callback] code:", code);
-
   if (!code) {
     return Response.json(
       { error: "Authorization code not provided" },
@@ -16,7 +14,6 @@ export async function GET(request: NextRequest) {
 
   try {
     const tokens = await getTokens(code);
-    console.log("[Spotify Callback] tokens response:", tokens);
 
     if (tokens.error) {
       return Response.json({ error: tokens.error }, { status: 400 });
