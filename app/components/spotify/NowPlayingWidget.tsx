@@ -2,8 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
-import { Pause, ExternalLink, Music, Loader2 } from "lucide-react";
+import { Pause, ExternalLink, Music, Loader2, Volume2 } from "lucide-react";
 
 interface NowPlayingData {
   isPlaying: boolean;
@@ -61,47 +60,56 @@ export default function NowPlayingWidget() {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    let animationFrameId: number;
+
+    const updateProgress = () => {
       if (!nowPlaying.isPlaying || durationMs === 0) return;
 
       const elapsed = Date.now() - lastUpdateRef.current;
-      const updatedProgress = progressMs + elapsed;
+      const updatedProgress = (nowPlaying.progress || 0) + elapsed;
 
       if (updatedProgress < durationMs) {
         setProgressMs(updatedProgress);
+        animationFrameId = requestAnimationFrame(updateProgress);
+      } else {
+        setProgressMs(durationMs);
       }
-    }, 1000);
+    };
 
-    return () => clearInterval(interval);
-  }, [progressMs, durationMs, nowPlaying.isPlaying]);
+    animationFrameId = requestAnimationFrame(updateProgress);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [nowPlaying.isPlaying, durationMs, nowPlaying.progress]);
 
   const handleSpotifyLogin = () => {
     window.location.href = "/api/auth/spotify";
   };
 
-  // const progressPercentage =
-  //   progressMs && durationMs
-  //     ? Math.min((progressMs / durationMs) * 100, 100)
-  //     : 0;
+  const progressPercentage =
+    progressMs && durationMs
+      ? Math.min((progressMs / durationMs) * 100, 100)
+      : 0;
 
-  // const formatTime = (ms: number) => {
-  //   const minutes = Math.floor(ms / 60000);
-  //   const seconds = Math.floor((ms % 60000) / 1000);
-  //   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-  // };
+  const formatTime = (ms: number) => {
+    const minutes = Math.floor(ms / 60000);
+    const seconds = Math.floor((ms % 60000) / 1000);
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
 
   // Loading state
   if (loading) {
     return (
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="relative bg-gradient-to-br from-gray-900/98 via-gray-800/98 to-gray-900/98 backdrop-blur-md rounded-2xl p-6 border border-gray-700/30 shadow-2xl overflow-hidden"
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="relative bg-black/20 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-2xl overflow-hidden"
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 via-emerald-500/5 to-teal-500/5 animate-pulse" />
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-cyan-500/10 animate-pulse" />
         <div className="relative z-10 flex items-center justify-center">
-          <Loader2 className="w-6 h-6 text-green-400 animate-spin" />
-          <span className="ml-2 text-gray-300 text-sm">Loading...</span>
+          <Loader2 className="w-6 h-6 text-purple-400 animate-spin" />
+          <span className="ml-3 text-gray-300 text-sm font-medium">
+            Loading music...
+          </span>
         </div>
       </motion.div>
     );
@@ -111,28 +119,46 @@ export default function NowPlayingWidget() {
   if (!isAuthenticated) {
     return (
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="relative bg-gradient-to-br from-gray-900/98 via-gray-800/98 to-gray-900/98 backdrop-blur-md rounded-2xl p-6 border border-gray-700/30 shadow-2xl overflow-hidden"
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="relative bg-black/20 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-2xl overflow-hidden"
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-spotify-green/5 via-green-500/5 to-emerald-500/5" />
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-cyan-500/10" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.1),transparent_50%)]" />
+
         <div className="relative z-10 text-center">
           <motion.div
-            className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg"
+            className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-2xl shadow-purple-500/25"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            animate={{
+              boxShadow: [
+                "0 0 20px rgba(147, 51, 234, 0.3)",
+                "0 0 30px rgba(59, 130, 246, 0.5)",
+                "0 0 20px rgba(147, 51, 234, 0.3)",
+              ],
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
           >
             <Music className="w-8 h-8 text-white" />
           </motion.div>
           <h3 className="text-white text-lg font-bold mb-2">Connect Spotify</h3>
-          <p className="text-gray-400 text-sm mb-4">
-            Link your Spotify account to display what you are listening to
+          <p className="text-gray-400 text-sm mb-6 leading-relaxed">
+            Link your Spotify account to display what you're listening to
           </p>
           <motion.button
             onClick={handleSpotifyLogin}
-            className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 px-6 py-3 rounded-xl text-white font-semibold shadow-lg transition-all duration-200 flex items-center gap-2 mx-auto"
+            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 px-6 py-3 rounded-full text-white font-semibold shadow-lg transition-all duration-200 flex items-center gap-2 mx-auto"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            animate={{
+              boxShadow: [
+                "0 0 20px rgba(147, 51, 234, 0.3)",
+                "0 0 30px rgba(59, 130, 246, 0.5)",
+                "0 0 20px rgba(147, 51, 234, 0.3)",
+              ],
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
           >
             <Music className="w-4 h-4" />
             Connect Spotify
@@ -146,17 +172,17 @@ export default function NowPlayingWidget() {
   if (!nowPlaying.isPlaying) {
     return (
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="relative bg-gradient-to-br from-gray-900/98 via-gray-800/98 to-gray-900/98 backdrop-blur-md rounded-2xl p-6 border border-gray-700/30 shadow-2xl overflow-hidden"
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="relative bg-black/20 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-2xl overflow-hidden"
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-600/5 via-gray-500/5 to-gray-600/5" />
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-500/5 via-slate-500/5 to-gray-500/5" />
         <div className="relative z-10 flex items-center">
-          <div className="w-16 h-16 bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl flex items-center justify-center shadow-lg">
+          <div className="w-16 h-16 bg-gradient-to-br from-slate-700 via-gray-700 to-slate-800 rounded-2xl flex items-center justify-center shadow-lg">
             <Pause className="w-8 h-8 text-gray-400" />
           </div>
           <div className="ml-4">
-            <h3 className="text-white text-lg font-semibold">Not Playing</h3>
+            <h3 className="text-white text-lg font-semibold">Music Paused</h3>
             <p className="text-gray-400 text-sm">No music currently playing</p>
           </div>
         </div>
@@ -167,24 +193,26 @@ export default function NowPlayingWidget() {
   // Now playing state
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="relative bg-gradient-to-br from-gray-900/98 via-gray-800/98 to-gray-900/98 backdrop-blur-md rounded-2xl p-6 border border-gray-700/30 shadow-2xl overflow-hidden"
+      initial={{ opacity: 0, scale: 0.95, y: 20 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      className="relative bg-black/20 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-2xl overflow-hidden"
     >
       {/* Animated background overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 via-emerald-500/5 to-teal-500/5" />
+      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-cyan-500/10" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.1),transparent_50%)]" />
 
       {/* Subtle animated border */}
       <motion.div
-        className="absolute inset-0 rounded-2xl border border-green-500/20"
+        className="absolute inset-0 rounded-2xl border"
         animate={{
           borderColor: [
-            "rgba(34, 197, 94, 0.2)",
-            "rgba(16, 185, 129, 0.3)",
-            "rgba(34, 197, 94, 0.2)",
+            "rgba(147, 51, 234, 0.3)",
+            "rgba(59, 130, 246, 0.5)",
+            "rgba(34, 211, 238, 0.4)",
+            "rgba(147, 51, 234, 0.3)",
           ],
         }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
 
       <div className="relative z-10">
@@ -196,11 +224,30 @@ export default function NowPlayingWidget() {
           transition={{ delay: 0.1 }}
         >
           <motion.div
-            className="w-3 h-3 bg-green-500 rounded-full"
-            animate={{ scale: [1, 1.2, 1] }}
+            className="flex items-center gap-2"
+            animate={{ opacity: [0.7, 1, 0.7] }}
             transition={{ duration: 2, repeat: Infinity }}
-          />
-          <span className="text-green-400 text-xs font-bold tracking-wider uppercase">
+          >
+            <Volume2 className="w-4 h-4 text-purple-400" />
+            <div className="flex gap-1">
+              {[0, 1, 2].map((i) => (
+                <motion.div
+                  key={i}
+                  className="w-1 bg-gradient-to-t from-purple-500 to-cyan-400 rounded-full"
+                  animate={{
+                    height: [8, 16, 12, 8],
+                    opacity: [0.5, 1, 0.8, 0.5],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    delay: i * 0.2,
+                  }}
+                />
+              ))}
+            </div>
+          </motion.div>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 text-xs font-bold tracking-wider uppercase">
             Now Playing
           </span>
         </motion.div>
@@ -208,7 +255,7 @@ export default function NowPlayingWidget() {
         <div className="flex items-start gap-4">
           {/* Album Art */}
           <motion.div
-            className="relative w-20 h-20 rounded-xl overflow-hidden shadow-2xl flex-shrink-0"
+            className="relative w-20 h-20 rounded-2xl overflow-hidden shadow-2xl flex-shrink-0"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
@@ -218,22 +265,32 @@ export default function NowPlayingWidget() {
               {nowPlaying.albumImageUrl ? (
                 <motion.div
                   key={nowPlaying.albumImageUrl}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
                   className="relative w-full h-full"
                 >
-                  <Image
+                  <img
                     src={nowPlaying.albumImageUrl}
                     alt="Album cover"
-                    fill
-                    className="object-cover"
+                    className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                  <motion.div
+                    className="absolute inset-0 border-2 border-white/20 rounded-2xl"
+                    animate={{
+                      borderColor: [
+                        "rgba(255,255,255,0.1)",
+                        "rgba(147, 51, 234, 0.3)",
+                        "rgba(255,255,255,0.1)",
+                      ],
+                    }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                  />
                 </motion.div>
               ) : (
-                <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
-                  <Music className="w-8 h-8 text-gray-400" />
+                <div className="w-full h-full bg-gradient-to-br from-purple-600 via-blue-600 to-cyan-600 flex items-center justify-center">
+                  <Music className="w-8 h-8 text-white" />
                 </div>
               )}
             </AnimatePresence>
@@ -256,7 +313,7 @@ export default function NowPlayingWidget() {
             </motion.h3>
 
             <motion.p
-              className="text-gray-400 text-sm mb-1 truncate"
+              className="text-gray-300 text-sm mb-1 truncate"
               key={nowPlaying.artist}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -267,7 +324,7 @@ export default function NowPlayingWidget() {
 
             {nowPlaying.album && (
               <motion.p
-                className="text-gray-500 text-xs truncate"
+                className="text-gray-400 text-xs truncate"
                 key={nowPlaying.album}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -284,43 +341,57 @@ export default function NowPlayingWidget() {
               href={nowPlaying.songUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 hover:bg-white/10 rounded-lg transition-colors duration-200"
+              className="p-2 hover:bg-white/10 rounded-xl transition-all duration-200 group"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4 }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
-              <ExternalLink className="w-4 h-4 text-gray-400 hover:text-white transition-colors" />
+              <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-purple-400 transition-colors" />
             </motion.a>
           )}
         </div>
 
         {/* Progress Bar */}
-        {/* {progressMs > 0 && durationMs > 0 && (
+        {progressMs > 0 && durationMs > 0 && (
           <motion.div
             className="mt-4"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <div className="flex items-center justify-between text-xs text-gray-400 mb-2">
-              <span>{formatTime(progressMs)}</span>
+            <div className="flex items-center justify-between text-xs text-gray-400 mb-2 font-mono">
+              <span>{formatTime(Math.min(progressMs, durationMs))}</span>
               <span>{formatTime(durationMs)}</span>
             </div>
 
-            <div className="relative w-full h-2 bg-gray-700/50 rounded-full overflow-hidden backdrop-blur-sm">
+            <div className="relative w-full h-2 bg-white/10 rounded-full overflow-hidden backdrop-blur-sm">
               <motion.div
-                className="absolute left-0 top-0 h-full bg-gradient-to-r from-green-500 to-emerald-500 rounded-full shadow-lg"
-                style={{ width: `${progressPercentage}%` }}
-                initial={{ width: 0 }}
-                animate={{ width: `${progressPercentage}%` }}
-                transition={{ duration: 1, ease: "easeOut" }}
+                className="absolute left-0 top-0 h-full bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 rounded-full shadow-lg"
+                style={{
+                  width: `${
+                    durationMs > 0
+                      ? Math.min((progressMs / durationMs) * 100, 100)
+                      : 0
+                  }%`,
+                }}
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse" />
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-full"
+                animate={{
+                  x: [-100, 300],
+                  opacity: [0, 1, 0],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
             </div>
           </motion.div>
-        )} */}
+        )}
       </div>
     </motion.div>
   );
