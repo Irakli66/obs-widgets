@@ -1,8 +1,7 @@
 // lib/spotify.ts
 const client_id = process.env.SPOTIFY_CLIENT_ID!;
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET!;
-const redirect_uri = process.env.SPOTIFY_REDIRECT_URI!; // e.g., http://localhost:3000/api/auth/callback/spotify
-
+const redirect_uri = process.env.SPOTIFY_REDIRECT_URI!;
 const basic = Buffer.from(`${client_id}:${client_secret}`).toString("base64");
 const TOKEN_ENDPOINT = "https://accounts.spotify.com/api/token";
 const NOW_PLAYING_ENDPOINT =
@@ -49,6 +48,8 @@ export const getAuthUrl = () => {
 };
 
 export const getTokens = async (code: string) => {
+  console.log("[getTokens] code:", code);
+  console.log("[getTokens] client_id:", client_id, "redirect_uri:", redirect_uri);
   const response = await fetch(TOKEN_ENDPOINT, {
     method: "POST",
     headers: {

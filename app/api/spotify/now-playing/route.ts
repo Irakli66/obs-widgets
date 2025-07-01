@@ -15,17 +15,13 @@ export async function GET() {
       return Response.json({ error: "Not authenticated" }, { status: 401 });
     }
 
+    let setAccessTokenCookie = false;
+
     // Refresh token if needed
     if (!spotify_access_token) {
       const tokenData = await getAccessToken(spotify_refresh_token);
       spotify_access_token = tokenData.access_token;
-
-      // Note: Setting cookies in response headers for App Router
-      const response = new Response();
-      response.headers.set(
-        "Set-Cookie",
-        `spotify_access_token=${spotify_access_token}; HttpOnly; Secure; SameSite=Strict; Max-Age=3600; Path=/`
-      );
+      setAccessTokenCookie = true;
     }
 
     if (!spotify_access_token) {
@@ -59,6 +55,17 @@ export async function GET() {
       progress: song.progress_ms,
       duration: song.item.duration_ms,
     };
+
+    // Set the cookie on the response if we refreshed the access token
+    if (setAccessTokenCookie) {
+      return new Response(JSON.stringify(data), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          "Set-Cookie": `spotify_access_token=${spotify_access_token}; HttpOnly; Secure; SameSite=Strict; Max-Age=3600; Path=/`,
+        },
+      });
+    }
 
     return Response.json(data);
   } catch (error) {

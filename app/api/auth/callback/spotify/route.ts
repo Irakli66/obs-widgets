@@ -5,6 +5,8 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
 
+  console.log("[Spotify Callback] code:", code);
+
   if (!code) {
     return Response.json(
       { error: "Authorization code not provided" },
@@ -14,6 +16,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const tokens = await getTokens(code);
+    console.log("[Spotify Callback] tokens response:", tokens);
 
     if (tokens.error) {
       return Response.json({ error: tokens.error }, { status: 400 });
@@ -33,9 +36,9 @@ export async function GET(request: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error("Error getting tokens:", error);
+    console.error("[Spotify Callback] Error getting tokens:", error);
     return Response.json(
-      { error: "Failed to get access token" },
+      { error: "Failed to get access token", details: (error as any)?.message || error },
       { status: 500 }
     );
   }
