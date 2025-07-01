@@ -12,6 +12,7 @@ import {
   Users,
   Trophy,
   Settings,
+  Music,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -24,6 +25,15 @@ const navigationItems = [
     color: "from-orange-500 to-red-500",
     route: "/faceit-stats",
     features: ["Real-time stats", "Match history", "Skill progression"],
+  },
+  {
+    id: "spotify",
+    title: "Spotify music",
+    description: "Showing currently playing song on spotify",
+    icon: Music,
+    color: "from-blue-500 to-cyan-500",
+    route: "/spotify/now-playing",
+    features: ["Live preview", "Custom design", "Scene transitions"],
   },
   {
     id: "camera",
@@ -189,7 +199,7 @@ export default function TyniteNavigation() {
   };
 
   return (
-    <div className="md:min-h-screen max-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black relative overflow-y-auto md:overflow-hidden">
+    <div className="md:min-h-screen max-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black relative overflow-y-auto lg:overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
@@ -259,7 +269,7 @@ export default function TyniteNavigation() {
         </div>
 
         {/* Navigation Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
           {navigationItems.map((item, index) => (
             <NavigationCard
               key={item.id}
