@@ -1,10 +1,9 @@
-import SpinningCube from "./components/SpinningCube";
+import TyniteNavigation from "./components/Home";
 
 export default function Home() {
   return (
     <div className="">
-      {/* <p>tests</p> */}
-      <SpinningCube />
+      <TyniteNavigation />
     </div>
   );
 }

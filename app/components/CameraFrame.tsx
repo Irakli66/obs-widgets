@@ -168,7 +168,6 @@ const CameraFrame = () => {
             />
           </line>
 
-          {/* Professional frame border enhancement */}
           <rect
             x="6"
             y="6"

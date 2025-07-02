@@ -11,7 +11,6 @@ export async function GET() {
       "spotify_refresh_token"
     )?.value;
 
-    // Fallback to env if no cookies (e.g., OBS or serverless)
     if (!spotify_refresh_token && process.env.SPOTIFY_REFRESH_TOKEN) {
       spotify_refresh_token = process.env.SPOTIFY_REFRESH_TOKEN;
     }
@@ -22,7 +21,6 @@ export async function GET() {
 
     let setAccessTokenCookie = false;
 
-    // Refresh token if needed
     if (!spotify_access_token) {
       const tokenData = await getAccessToken(spotify_refresh_token);
       spotify_access_token = tokenData.access_token;
@@ -61,7 +59,6 @@ export async function GET() {
       duration: song.item.duration_ms,
     };
 
-    // Set the cookie on the response if we refreshed the access token
     if (setAccessTokenCookie) {
       return new Response(JSON.stringify(data), {
         status: 200,

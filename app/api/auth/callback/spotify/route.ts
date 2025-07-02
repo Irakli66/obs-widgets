@@ -18,16 +18,13 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: tokens.error }, { status: 400 });
     }
 
-    // Save tokens to file for OBS/server-side use
-
-    // ✅ Use NextResponse so we can set cookies
     const response = NextResponse.redirect(new URL("/", request.url));
 
     response.cookies.set("spotify_access_token", tokens.access_token, {
       httpOnly: true,
       secure: true,
       sameSite: "strict",
-      maxAge: 3600, // 1 hour
+      maxAge: 3600,
       path: "/",
     });
 
@@ -35,7 +32,7 @@ export async function GET(request: NextRequest) {
       httpOnly: true,
       secure: true,
       sameSite: "strict",
-      maxAge: 60 * 60 * 24 * 30, // 30 days
+      maxAge: 60 * 60 * 24 * 30,
       path: "/",
     });
 

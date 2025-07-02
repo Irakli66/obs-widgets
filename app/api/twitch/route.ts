@@ -1,4 +1,3 @@
-// /app/api/twitch/route.ts
 import { NextResponse } from "next/server";
 
 let accessToken: string | null = null;

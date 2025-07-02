@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const FACEIT_ID = process.env.FACEIT_ID; // your player_id
+const FACEIT_ID = process.env.FACEIT_ID;
 const API_KEY = process.env.FACEIT_API_KEY;
 
 type ItemType = {

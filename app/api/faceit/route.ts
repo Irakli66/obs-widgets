@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const FACEIT_USERNAME = process.env.FACEIT_USERNAME; // secure in .env.local
-  const FACEIT_API_KEY = process.env.FACEIT_API_KEY; // secure in .env.local
+  const FACEIT_USERNAME = process.env.FACEIT_USERNAME;
+  const FACEIT_API_KEY = process.env.FACEIT_API_KEY;
 
   try {
     const res = await fetch(

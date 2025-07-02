@@ -13,6 +13,7 @@ import {
   Trophy,
   Settings,
   Music,
+  Coffee,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -31,7 +32,7 @@ const navigationItems = [
     title: "Spotify music",
     description: "Showing currently playing song on spotify",
     icon: Music,
-    color: "from-blue-500 to-cyan-500",
+    color: "from-green-500 to-blue-500",
     route: "/spotify/now-playing",
     features: ["Live preview", "Custom design", "Scene transitions"],
   },
@@ -60,6 +61,15 @@ const navigationItems = [
     icon: Clock,
     color: "from-purple-500 to-pink-500",
     route: "/starting-soon",
+    features: ["Countdown timer", "Chat interaction", "Custom branding"],
+  },
+  {
+    id: "berightback",
+    title: "Be Right Back",
+    description: "Coffee break screen",
+    icon: Coffee,
+    color: "from-orange-500 to-red-500",
+    route: "/brb",
     features: ["Countdown timer", "Chat interaction", "Custom branding"],
   },
 ];
@@ -228,7 +238,7 @@ export default function TyniteNavigation() {
           <FloatingElement>
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="inline-flex items-center gap-3 mb-6"
+              className="inline-flex items-center gap-3 mb-6 relative"
             >
               <motion.div
                 animate={{ rotate: 360 }}
@@ -236,16 +246,24 @@ export default function TyniteNavigation() {
               >
                 <Zap className="w-8 h-8 text-cyan-400" />
               </motion.div>
-              <h1 className="text-5xl md:text-7xl font-black text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text">
-                TYNITE
-              </h1>
+
+              {/* TYNITE + Beta wrapper */}
+              <div className="relative">
+                <h1 className="text-5xl md:text-7xl font-black text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text">
+                  TYNITE
+                </h1>
+                {/* Beta badge */}
+                <span className="absolute top-2 -right-12 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded shadow">
+                  BETA
+                </span>
+              </div>
             </motion.div>
           </FloatingElement>
 
           <FloatingElement delay={0.2}>
             <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-              Your all-in-one streaming toolkit. Professional widgets and
-              overlays to elevate your content.
+              All-in-one streaming toolkit. Professional widgets and overlays to
+              elevate your content.
             </p>
           </FloatingElement>
 
