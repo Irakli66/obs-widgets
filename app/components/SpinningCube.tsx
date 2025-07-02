@@ -50,7 +50,7 @@ const navigationItems = [
     description: "Essential information display for your stream",
     icon: BarChart3,
     color: "from-emerald-500 to-teal-500",
-    route: "/top-bar",
+    route: "/top-bar?twitch=true",
     features: ["Custom metrics", "Live updates", "Minimal design"],
   },
   {
