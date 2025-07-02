@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 import tmi, { ChatUserstate } from "tmi.js";
 
-// replace string with you twitch username as a fallback
+// replace with your Twitch username or use env var
 const TWITCH_CHANNEL = process.env.TWITCH_USERNAME || "tynite66";
 
 type ChatMessage = {
@@ -22,6 +22,7 @@ interface TwitchChatProps {
 
 export default function TwitchChat({ className = "" }: TwitchChatProps) {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const getBadgeColor = (badge: string) => {
     switch (badge) {
@@ -74,6 +75,14 @@ export default function TwitchChat({ className = "" }: TwitchChatProps) {
     };
   }, []);
 
+  // Scroll to bottom when new message comes in
+  useEffect(() => {
+    const container = chatContainerRef.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }, [chatMessages]);
+
   return (
     <motion.div
       initial={{ x: 400, opacity: 0 }}
@@ -92,7 +101,10 @@ export default function TwitchChat({ className = "" }: TwitchChatProps) {
         <p className="text-gray-400 text-xs">Live from Twitch</p>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+      <div
+        ref={chatContainerRef}
+        className="flex-1 overflow-y-auto p-4 space-y-3"
+      >
         <AnimatePresence mode="popLayout">
           {chatMessages.map((msg) => (
             <motion.div

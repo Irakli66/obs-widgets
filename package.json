@@ -24,7 +24,9 @@
     "swr": "^2.3.3",
     "tailwind-merge": "^3.3.1",
     "three": "^0.177.0",
-    "tmi.js": "^1.8.5"
+    "tmi.js": "^1.8.5",
+    "zod": "^3.25.67",
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
