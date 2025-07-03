@@ -10,8 +10,6 @@ import {
   Clock,
 } from "lucide-react";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
 
 export default function TopBar() {
   const [time, setTime] = useState(new Date());
@@ -26,32 +24,25 @@ export default function TopBar() {
     fps: "60 FPS",
   });
 
-  const searchParams = useSearchParams();
-  const isTwitch = searchParams.get("twitch") === "true";
-
-  const fetchStreamData = async () => {
+  // Fetch Twitch data
+  const fetchTwitchData = async () => {
     try {
-      const res = await fetch(isTwitch ? "/api/twitch" : "/api/kick/stream");
+      const res = await fetch("/api/twitch");
       const data = await res.json();
 
-      if (data?.error) {
-        console.error("Stream data error:", data.error);
-        return;
-      }
-
-      const startedAt = data.startedAt ? new Date(data.startedAt) : null;
+      const stream = data.stream;
 
       setStreamData((prev) => ({
         ...prev,
-        isLive: data.isLive ?? false,
-        viewers: data.viewers ?? 0,
-        followers: data.followers ?? 0,
-        startedAt,
-        title: data.title ?? "",
-        game: data.game ?? "",
+        isLive: !!stream,
+        viewers: stream?.viewer_count || 0,
+        followers: data.followers || 0,
+        startedAt: stream?.started_at ? new Date(stream.started_at) : null,
+        title: stream?.title || "",
+        game: stream?.game_name || "",
       }));
     } catch (err) {
-      console.error("Failed to fetch stream data", err);
+      console.error("Failed to fetch Twitch data", err);
     }
   };
 
@@ -71,16 +62,20 @@ export default function TopBar() {
   };
 
   useEffect(() => {
-    const timeTimer = setInterval(() => setTime(new Date()), 1000);
+    // Update time every second
+    const timeTimer = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
 
-    fetchStreamData();
-    const dataTimer = setInterval(fetchStreamData, 20000);
+    // Fetch Twitch data initially and then every 30 seconds
+    fetchTwitchData();
+    const dataTimer = setInterval(fetchTwitchData, 30000);
 
     return () => {
       clearInterval(timeTimer);
       clearInterval(dataTimer);
     };
-  }, [isTwitch]); // <-- re-fetch if the param changes
+  }, []);
 
   // Update uptime every second when live
   useEffect(() => {
@@ -121,161 +116,140 @@ export default function TopBar() {
   );
 
   return (
-    <div className="relative h-screen">
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="w-full relative flex items-center justify-between px-4 py-2 bg-gradient-to-r from-slate-900/95 via-purple-900/95 to-slate-900/95 backdrop-blur-md border-b border-purple-500/20 shadow-2xl"
-      >
-        {/* Animated background overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-cyan-500/10 animate-pulse" />
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className="w-full relative flex items-center justify-between px-4 py-2 bg-gradient-to-r from-slate-900/95 via-purple-900/95 to-slate-900/95 backdrop-blur-md border-b border-purple-500/20 shadow-2xl"
+    >
+      {/* Animated background overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-cyan-500/10 animate-pulse" />
 
-        {/* Left Section - Brand & Live Status */}
-        <div className="flex items-center gap-4 z-10">
-          <motion.div
-            className="flex items-center gap-2"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            {/* <div className="w-8 h-8 bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-500 rounded-lg flex items-center justify-center shadow-lg shadow-purple-500/25">
+      {/* Left Section - Brand & Live Status */}
+      <div className="flex items-center gap-4 z-10">
+        <motion.div
+          className="flex items-center gap-2"
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          {/* <div className="w-8 h-8 bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-500 rounded-lg flex items-center justify-center shadow-lg shadow-purple-500/25">
             <span className="text-white font-bold text-sm">T</span>
           </div> */}
+          <Image
+            src="/images/tyniteprime-removebg.png"
+            width={32}
+            height={32}
+            alt="T"
+            className="w-full h-full"
+          />
+          <h2 className="text-white text-sm font-bold tracking-wide">TYNITE</h2>
+        </motion.div>
+
+        {/* Live Indicator */}
+        <motion.div
+          className={`flex items-center gap-2 px-3 py-1 rounded-full ${
+            streamData.isLive
+              ? "bg-red-500/20 border border-red-500/40"
+              : "bg-purple-600/20 border border-purple-600/40"
+          }`}
+          animate={streamData.isLive ? { scale: [1, 1.02, 1] } : {}}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <div
+            className={`w-2 h-2 rounded-full ${
+              streamData.isLive ? "bg-red-500" : "bg-purple-400"
+            } ${streamData.isLive ? "animate-pulse" : ""}`}
+          />
+          <span className="text-white text-xs font-semibold">
+            {streamData.isLive ? "LIVE" : "OFFLINE"}
+          </span>
+        </motion.div>
+      </div>
+
+      {/* Center Section - Stream Stats */}
+      <div className="flex items-center gap-6 z-10">
+        <motion.div
+          className="flex items-center gap-2 bg-black/40 px-3 py-1 rounded-lg backdrop-blur-sm border border-white/10"
+          whileHover={{ scale: 1.05, backgroundColor: "rgba(0,0,0,0.6)" }}
+        >
+          <Eye className="w-3 h-3 text-blue-400" />
+          <span className="text-white text-xs font-semibold">
+            {streamData.viewers.toLocaleString()}
+          </span>
+        </motion.div>
+
+        <motion.div
+          className="flex items-center gap-2 bg-black/40 px-3 py-1 rounded-lg backdrop-blur-sm border border-white/10"
+          whileHover={{ scale: 1.05, backgroundColor: "rgba(0,0,0,0.6)" }}
+        >
+          <Users className="w-3 h-3 text-green-400" />
+          <span className="text-white text-xs font-semibold">
+            {streamData.followers.toLocaleString()}
+          </span>
+        </motion.div>
+
+        <motion.div
+          className="flex items-center gap-2 bg-black/40 px-3 py-1 rounded-lg backdrop-blur-sm border border-white/10"
+          whileHover={{ scale: 1.05, backgroundColor: "rgba(0,0,0,0.6)" }}
+        >
+          <Clock className="w-3 h-3 text-yellow-400" />
+          <span className="text-white text-xs font-semibold">
+            {streamData.uptime}
+          </span>
+        </motion.div>
+      </div>
+
+      {/* Right Section - Social & Time */}
+      <div className="flex items-center gap-4 z-10">
+        {/* Social Links */}
+        <div className="flex items-center gap-3">
+          <motion.div
+            className="flex items-center gap-2 bg-black/40 px-2 py-1 rounded-lg backdrop-blur-sm border border-white/10"
+            whileHover={{ scale: 1.1, backgroundColor: "rgba(0,0,0,0.6)" }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <XIcon className="w-3 h-3 text-white" />
+            <span className="text-white text-xs font-semibold">@tynite66</span>
+          </motion.div>
+
+          <motion.div
+            className="flex items-center gap-2 bg-black/40 px-2 py-1 rounded-lg backdrop-blur-sm border border-white/10"
+            whileHover={{ scale: 1.1, backgroundColor: "rgba(255,0,0,0.1)" }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Youtube className="w-3 h-3 text-red-500" />
+            <span className="text-white text-xs font-semibold">tynite</span>
+          </motion.div>
+          <motion.div
+            className="flex items-center gap-2 bg-black/40 px-2 py-1 rounded-lg backdrop-blur-sm border border-white/10"
+            whileHover={{ scale: 1.1, backgroundColor: "rgba(0,255,0,0.1)" }}
+            whileTap={{ scale: 0.95 }}
+          >
             <Image
-              src="/images/tyniteprime-removebg.png"
-              width={32}
-              height={32}
-              alt="T"
-              className="w-full h-full"
+              src="/images/kickLogo.png"
+              width={12}
+              height={12}
+              alt="kick logo"
             />
-            <h2 className="text-white text-sm font-bold tracking-wide">
-              TYNITE
-            </h2>
-          </motion.div>
-
-          {/* Live Indicator */}
-          <motion.div
-            className={`flex items-center gap-2 px-3 py-1 rounded-full ${
-              streamData.isLive
-                ? "bg-red-500/20 border border-red-500/40"
-                : "bg-purple-600/20 border border-purple-600/40"
-            }`}
-            animate={streamData.isLive ? { scale: [1, 1.02, 1] } : {}}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <div
-              className={`w-2 h-2 rounded-full ${
-                streamData.isLive ? "bg-red-500" : "bg-purple-400"
-              } ${streamData.isLive ? "animate-pulse" : ""}`}
-            />
-            <span className="text-white text-xs font-semibold">
-              {streamData.isLive ? "LIVE" : "OFFLINE"}
-            </span>
+            <span className="text-white text-xs font-semibold">tynite</span>
           </motion.div>
         </div>
 
-        {/* Center Section - Stream Stats */}
-        <div className="flex items-center gap-6 z-10">
-          <motion.div
-            className="flex items-center gap-2 bg-black/40 px-3 py-1 rounded-lg backdrop-blur-sm border border-white/10"
-            whileHover={{ scale: 1.05, backgroundColor: "rgba(0,0,0,0.6)" }}
-          >
-            <Eye className="w-3 h-3 text-blue-400" />
-            <span className="text-white text-xs font-semibold">
-              {streamData.viewers.toLocaleString()}
-            </span>
-          </motion.div>
+        {/* Connection Status */}
 
-          <motion.div
-            className="flex items-center gap-2 bg-black/40 px-3 py-1 rounded-lg backdrop-blur-sm border border-white/10"
-            whileHover={{ scale: 1.05, backgroundColor: "rgba(0,0,0,0.6)" }}
-          >
-            <Users className="w-3 h-3 text-green-400" />
-            <span className="text-white text-xs font-semibold">
-              {streamData.followers.toLocaleString()}
-            </span>
-          </motion.div>
-
-          <motion.div
-            className="flex items-center gap-2 bg-black/40 px-3 py-1 rounded-lg backdrop-blur-sm border border-white/10"
-            whileHover={{ scale: 1.05, backgroundColor: "rgba(0,0,0,0.6)" }}
-          >
-            <Clock className="w-3 h-3 text-yellow-400" />
-            <span className="text-white text-xs font-semibold">
-              {streamData.uptime}
-            </span>
-          </motion.div>
+        {/* Date & Time */}
+        <div className="text-right">
+          <div className="text-white text-xs font-bold">{formattedTime}</div>
+          <div className="text-purple-300 text-xs">{formattedDate}</div>
         </div>
+      </div>
 
-        {/* Right Section - Social & Time */}
-        <div className="flex items-center gap-4 z-10">
-          {/* Social Links */}
-          <div className="flex items-center gap-3">
-            <motion.div
-              className="flex items-center gap-2 bg-black/40 px-2 py-1 rounded-lg backdrop-blur-sm border border-white/10"
-              whileHover={{ scale: 1.1, backgroundColor: "rgba(0,0,0,0.6)" }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <XIcon className="w-3 h-3 text-white" />
-              <span className="text-white text-xs font-semibold">
-                @tynite66
-              </span>
-            </motion.div>
-
-            <motion.div
-              className="flex items-center gap-2 bg-black/40 px-2 py-1 rounded-lg backdrop-blur-sm border border-white/10"
-              whileHover={{ scale: 1.1, backgroundColor: "rgba(255,0,0,0.1)" }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Youtube className="w-3 h-3 text-red-500" />
-              <span className="text-white text-xs font-semibold">tynite</span>
-            </motion.div>
-            <motion.div
-              className="flex items-center gap-2 bg-black/40 px-2 py-1 rounded-lg backdrop-blur-sm border border-white/10"
-              whileHover={{ scale: 1.1, backgroundColor: "rgba(0,255,0,0.1)" }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Image
-                src="/images/kickLogo.png"
-                width={12}
-                height={12}
-                alt="kick logo"
-              />
-              <span className="text-white text-xs font-semibold">tynite</span>
-            </motion.div>
-          </div>
-
-          {/* Connection Status */}
-
-          {/* Date & Time */}
-          <div className="text-right">
-            <div className="text-white text-xs font-bold">{formattedTime}</div>
-            <div className="text-purple-300 text-xs">{formattedDate}</div>
-          </div>
-        </div>
-
-        {/* Subtle animated border */}
-        {/* <motion.div
+      {/* Subtle animated border */}
+      {/* <motion.div
         className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500"
         animate={{ width: ["0%", "100%", "0%"] }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       /> */}
-      </motion.div>
-      <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-violet-200 p-4 rounded shadow text-center">
-        Currently showing <strong>{isTwitch ? "Twitch" : "Kick"}</strong> stream
-        data.
-        <br />
-        To view <strong>{isTwitch ? "Kick" : "Twitch"}</strong> data instead,
-        set <code>twitch={isTwitch ? "false" : "true"}</code> in the URL or
-        click{" "}
-        <Link
-          href={`/top-bar?twitch=${isTwitch ? "false" : "true"}`}
-          className="underline cursor-pointer"
-        >
-          HERE
-        </Link>
-        .
-      </p>
-    </div>
+    </motion.div>
   );
 }
