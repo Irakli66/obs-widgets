@@ -8,11 +8,10 @@ export async function GET() {
     const infoRes = await fetch(`https://kick.com/api/v1/channels/${slug}`);
     if (!infoRes.ok) throw new Error("Channel info fetch failed");
     const info = await infoRes.json();
-
     const live = info.livestream;
     const isLive = live?.is_live ?? false;
     const title = live?.session_title ?? "";
-    const startedAt = live?.started_at ?? null;
+    const startedAt = live?.start_time ?? null;
     const game = live?.categories?.[0]?.name ?? "";
 
     //Get viewer count
