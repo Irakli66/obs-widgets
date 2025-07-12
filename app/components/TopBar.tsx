@@ -89,17 +89,8 @@ export default function TopBar() {
     return () => clearInterval(uptimeTimer);
   }, [streamData.isLive, streamData.startedAt]);
 
-  const formattedTime = time.toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  });
-  const formattedDate = time.toLocaleDateString([], {
-    month: "short",
-    day: "numeric",
-    year: "2-digit",
-  });
+  const formattedTime = time.toUTCString().split(" ")[4];
+  const formattedDate = time.toUTCString().split(" ").slice(0, 4).join(" ");
 
   const XIcon = (props: SVGProps<SVGSVGElement>) => (
     <svg
