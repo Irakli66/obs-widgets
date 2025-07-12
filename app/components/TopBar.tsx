@@ -228,8 +228,8 @@ export default function TopBar() {
             >
               <Image
                 src="/images/kickLogo.png"
-                width={18}
-                height={18}
+                width={16}
+                height={16}
                 alt="kick logo"
               />
               <span className="text-white text-xs font-semibold">tynite</span>
