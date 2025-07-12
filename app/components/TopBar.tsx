@@ -2,7 +2,7 @@
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { useState, useEffect, SVGProps } from "react";
-import { Youtube, Users, Eye, Clock } from "lucide-react";
+import { Youtube, Users, Eye, Clock, Twitch } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -218,7 +218,7 @@ export default function TopBar() {
               whileHover={{ scale: 1.1, backgroundColor: "rgba(255,0,0,0.1)" }}
               whileTap={{ scale: 0.95 }}
             >
-              <Youtube className="w-3 h-3 text-red-500" />
+              <Youtube className="w-4 h-4 text-red-500" />
               <span className="text-white text-xs font-semibold">tynite</span>
             </motion.div>
             <motion.div
@@ -228,11 +228,19 @@ export default function TopBar() {
             >
               <Image
                 src="/images/kickLogo.png"
-                width={12}
-                height={12}
+                width={18}
+                height={18}
                 alt="kick logo"
               />
               <span className="text-white text-xs font-semibold">tynite</span>
+            </motion.div>
+            <motion.div
+              className="flex items-center gap-2 bg-black/40 px-2 py-1 rounded-lg backdrop-blur-sm border border-white/10"
+              whileHover={{ scale: 1.1, backgroundColor: "rgba(255,0,0,0.1)" }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Twitch className="w-4 h-4 text-violet-500" />
+              <span className="text-white text-xs font-semibold">tynite66</span>
             </motion.div>
           </div>
 
