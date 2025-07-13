@@ -157,7 +157,7 @@ export default function TopBar() {
         </div>
 
         {/* Center Section - Stream Stats */}
-        <div className="flex items-center gap-6 z-10">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-6 z-10 pointer-events-none">
           <motion.div
             className="flex items-center gap-2 bg-black/40 px-3 py-1 rounded-lg backdrop-blur-sm border border-white/10"
             whileHover={{ scale: 1.05, backgroundColor: "rgba(0,0,0,0.6)" }}
