@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Coffee, Clock } from "lucide-react";
-import TwitchChat from "./TwitchChat";
+// import TwitchChat from "./TwitchChat";
 
 export default function Brb() {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -154,7 +154,7 @@ export default function Brb() {
         </div>
       </div>
 
-      <TwitchChat />
+      {/* <TwitchChat /> */}
     </div>
   );
 }

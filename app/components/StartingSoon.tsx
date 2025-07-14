@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import TwitchChat from "./TwitchChat";
+// import TwitchChat from "./TwitchChat";
 
 export default function StartingSoon() {
   const [countdown, setCountdown] = useState(900);
@@ -136,7 +136,7 @@ export default function StartingSoon() {
         </div>
       </div>
 
-      <TwitchChat />
+      {/* <TwitchChat /> */}
     </div>
   );
 }
