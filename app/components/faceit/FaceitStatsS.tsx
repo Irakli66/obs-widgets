@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { useRequest } from "@/lib/hooks/useRequest";
 import Image from "next/image";
-import { Trophy, Target, Skull, Crosshair, Shield } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 import {
   FaceitPlayerData,
@@ -11,18 +11,76 @@ import {
   Last30MatchesData,
 } from "@/lib/types/faceit";
 
-const SKILL_LEVEL_COLORS = {
-  1: "from-gray-500 to-gray-600",
-  2: "from-gray-400 to-gray-500",
-  3: "from-yellow-500 to-yellow-600",
-  4: "from-yellow-400 to-yellow-500",
-  5: "from-orange-500 to-orange-600",
-  6: "from-orange-400 to-orange-500",
-  7: "from-red-500 to-red-600",
-  8: "from-red-400 to-red-500",
-  9: "from-purple-500 to-purple-600",
-  10: "from-purple-400 to-red-500",
-} as const;
+import {
+  Level1,
+  Level2,
+  Level3,
+  Level4,
+  Level5,
+  Level6,
+  Level7,
+  Level8,
+  Level9,
+  Level10,
+} from "./levels/Levels";
+
+const levelSvgs = {
+  1: <Level1 />,
+  2: <Level2 />,
+  3: <Level3 />,
+  4: <Level4 />,
+  5: <Level5 />,
+  6: <Level6 />,
+  7: <Level7 />,
+  8: <Level8 />,
+  9: <Level9 />,
+  10: <Level10 />,
+};
+
+export const eloRanges = [
+  { level: 1, min: 100, max: 500 },
+  { level: 2, min: 501, max: 750 },
+  { level: 3, min: 751, max: 900 },
+  { level: 4, min: 901, max: 1050 },
+  { level: 5, min: 1051, max: 1200 },
+  { level: 6, min: 1201, max: 1350 },
+  { level: 7, min: 1351, max: 1530 },
+  { level: 8, min: 1531, max: 1750 },
+  { level: 9, min: 1751, max: 2000 },
+  { level: 10, min: 2001, max: Infinity },
+];
+
+// Helper function to calculate ELO progress
+// const calculateEloProgress = (currentElo: number, skillLevel: number) => {
+//   const currentRange = eloRanges.find((range) => range.level === skillLevel);
+//   if (!currentRange)
+//     return { progress: 0, currentElo, minElo: 0, maxElo: 0, nextLevelElo: 0 };
+
+//   const nextRange = eloRanges.find((range) => range.level === skillLevel + 1);
+//   const nextLevelElo = nextRange ? nextRange.min : currentRange.max;
+
+//   // For level 10, progress is based on how much above 2001 they are
+//   if (skillLevel === 10) {
+//     const progress = Math.min((currentElo - currentRange.min) / 500, 1); // Assuming 500 as a reasonable "full bar" above 2001
+//     return {
+//       progress: progress * 100,
+//       currentElo,
+//       minElo: currentRange.min,
+//       maxElo: currentRange.max,
+//       nextLevelElo: null,
+//     };
+//   }
+
+//   const progress =
+//     (currentElo - currentRange.min) / (nextLevelElo - currentRange.min);
+//   return {
+//     progress: Math.max(0, Math.min(progress * 100, 100)),
+//     currentElo,
+//     minElo: currentRange.min,
+//     maxElo: nextLevelElo,
+//     nextLevelElo,
+//   };
+// };
 
 export default function FaceitStatsS() {
   const {
@@ -47,39 +105,33 @@ export default function FaceitStatsS() {
     revalidateOnFocus: false,
   });
 
-  const {
-    data: matchData,
-    error: matchError,
-    isLoading: matchLoading,
-  } = useRequest<Last30MatchesData>(
-    shouldFetchStats ? `/api/faceit/matches` : "",
-    {
-      refreshInterval: 30_000,
-      revalidateIfStale: true,
-      revalidateOnFocus: false,
-    }
-  );
+  const { error: matchError, isLoading: matchLoading } =
+    useRequest<Last30MatchesData>(
+      shouldFetchStats ? `/api/faceit/matches` : "",
+      {
+        refreshInterval: 30_000,
+        revalidateIfStale: true,
+        revalidateOnFocus: false,
+      }
+    );
 
   const csData = playerData?.games.cs2 || playerData?.games.csgo;
   const isInitialLoading = playerLoading;
-  // const isDataLoading = statsLoading || matchLoading;
   const hasError = playerError || statsError || matchError;
 
-  const getSkillLevelGradient = (level: number) => {
-    return (
-      SKILL_LEVEL_COLORS[level as keyof typeof SKILL_LEVEL_COLORS] ||
-      SKILL_LEVEL_COLORS[1]
-    );
-  };
+  // Calculate ELO progress
+  // const eloProgress = csData
+  //   ? calculateEloProgress(csData.faceit_elo, csData.skill_level)
+  //   : null;
 
   if (isInitialLoading) {
     return (
-      <div className="w-full max-w-md mx-auto bg-black/90 backdrop-blur-lg border-2 border-orange-500/50 rounded-2xl p-4 shadow-2xl">
-        <div className="flex items-center justify-center h-16">
-          <div className="flex items-center space-x-3">
-            <div className="w-3 h-3 bg-orange-500 rounded-full animate-pulse" />
-            <span className="text-white font-bold text-sm">
-              Loading FACEIT...
+      <div className="w-full max-w-4xl mx-auto bg-gradient-to-r from-slate-900/95 via-blue-900/95 to-slate-900/95 backdrop-blur-sm border border-blue-500/20 rounded-xl p-4">
+        <div className="flex items-center justify-center h-20">
+          <div className="flex items-center space-x-2">
+            <div className="w-4 h-4 bg-blue-500 rounded-full animate-pulse" />
+            <span className="text-blue-300 font-medium">
+              Loading FACEIT stats...
             </span>
           </div>
         </div>
@@ -89,10 +141,10 @@ export default function FaceitStatsS() {
 
   if (hasError || !playerData) {
     return (
-      <div className="w-full max-w-md mx-auto bg-black/90 backdrop-blur-lg border-2 border-red-500/70 rounded-2xl p-4 shadow-2xl">
-        <div className="flex items-center justify-center h-16">
-          <span className="text-red-400 font-bold text-sm">
-            FACEIT Connection Failed!
+      <div className="w-full max-w-4xl mx-auto bg-gradient-to-r from-red-900/20 via-blue-900/95 to-slate-900/95 backdrop-blur-sm border border-red-500/30 rounded-xl p-4">
+        <div className="flex items-center justify-center h-20">
+          <span className="text-red-400 font-medium">
+            Failed to load FACEIT data
           </span>
         </div>
       </div>
@@ -101,12 +153,12 @@ export default function FaceitStatsS() {
 
   if (matchLoading || statsLoading) {
     return (
-      <div className="w-full max-w-md mx-auto bg-black/90 backdrop-blur-lg border-2 border-orange-500/50 rounded-2xl p-4 shadow-2xl">
-        <div className="flex items-center justify-center h-16">
-          <div className="flex items-center space-x-3">
-            <div className="w-3 h-3 bg-orange-500 rounded-full animate-pulse" />
-            <span className="text-white font-bold text-sm">
-              Loading Stats...
+      <div className="w-full max-w-4xl mx-auto bg-gradient-to-r from-slate-900/95 via-blue-900/95 to-slate-900/95 backdrop-blur-sm border border-blue-500/20 rounded-xl p-4">
+        <div className="flex items-center justify-center h-20">
+          <div className="flex items-center space-x-2">
+            <div className="w-4 h-4 bg-blue-500 rounded-full animate-pulse" />
+            <span className="text-blue-300 font-medium">
+              Loading FACEIT stats...
             </span>
           </div>
         </div>
@@ -116,228 +168,118 @@ export default function FaceitStatsS() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.4 }}
-      className="w-full max-w-md mx-auto bg-black/95 backdrop-blur-xl border-2 border-orange-500/60 rounded-2xl overflow-hidden shadow-2xl shadow-orange-500/10"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="w-full relative max-w-xl mx-auto bg-gradient-to-r from-slate-900/95 via-blue-900/95 to-slate-900/95 backdrop-blur-sm border border-blue-500/20 rounded-xl overflow-hidden"
     >
-      {/* Header with Player Info */}
-      <div className="relative p-4 bg-gradient-to-r from-orange-500/20 to-red-500/20">
-        {/* Live indicator */}
-        <div className="absolute top-3 right-3 flex items-center space-x-2">
-          <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-lg shadow-red-500/50" />
-          <span className="text-white font-bold text-xs uppercase tracking-wider bg-red-500/20 px-2 py-1 rounded-full">
-            Live
-          </span>
-        </div>
+      {/* Animated background overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-sky-500/10 to-indigo-500/10 animate-pulse" />
 
-        <div className="flex items-center space-x-3">
-          {/* Avatar */}
-          <div className="relative">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-500 p-0.5 shadow-lg">
-              <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
-                {playerData.avatar ? (
-                  <Image
-                    src={playerData.avatar}
-                    alt={playerData.nickname}
-                    width={44}
-                    height={44}
-                    className="rounded-full"
-                  />
-                ) : (
-                  <span className="text-orange-400 font-bold text-lg">
-                    {playerData.nickname.charAt(0).toUpperCase()}
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Player Info */}
-          <div className="flex-1">
-            <h2 className="text-white font-bold text-lg leading-tight">
-              {playerData.nickname}
-            </h2>
-            <div className="flex items-center space-x-3 mt-1">
-              <div className="flex items-center space-x-1">
-                <span className="text-orange-400 font-bold text-lg">
-                  {csData?.faceit_elo}
-                </span>
-                <span className="text-white/70 text-xs font-medium">ELO</span>
-              </div>
-              {csData && (
-                <div
-                  className={`bg-gradient-to-r ${getSkillLevelGradient(
-                    csData.skill_level
-                  )} px-2 py-1 rounded-lg shadow-lg`}
-                >
-                  <div className="flex items-center space-x-1">
-                    <Trophy className="w-3 h-3 text-white" />
-                    <span className="text-white font-bold text-xs">
-                      LVL {csData.skill_level}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="relative z-10"
+      >
+        {/* Header Section */}
+        <div className="flex items-center justify-between p-4 pb-3">
+          {/* Avatar & Name */}
+          <div className="flex items-center space-x-3">
+            <div className="relative">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 via-sky-500 to-indigo-500 p-0.5 shadow-lg shadow-blue-500/25">
+                <div className="w-full h-full rounded-full bg-slate-800 flex items-center justify-center">
+                  {playerData.avatar ? (
+                    <Image
+                      src={playerData.avatar}
+                      alt={playerData.nickname}
+                      width={44}
+                      height={44}
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <span className="text-blue-400 font-bold text-lg">
+                      {playerData.nickname.charAt(0).toUpperCase()}
                     </span>
-                  </div>
+                  )}
                 </div>
-              )}
+              </div>
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-slate-800 animate-pulse" />
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Recent Results */}
-      <div className="px-4 py-3 bg-black/50">
-        <div className="flex items-center justify-between">
-          <span className="text-white font-bold text-xs uppercase tracking-wider">
-            Recent
-          </span>
-          <div className="flex space-x-1">
-            {statsData?.lifetime["Recent Results"]
-              .slice(-8)
-              .map((result, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: index * 0.05 }}
-                  className={`w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs shadow-lg ${
-                    result === "1"
-                      ? "bg-green-500 text-white shadow-green-500/30"
-                      : "bg-red-500 text-white shadow-red-500/30"
-                  }`}
-                >
-                  {result === "1" ? "W" : "L"}
-                </motion.div>
-              ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Last Match Performance - Compact Layout */}
-      {matchData?.lastGameStas && (
-        <div className="px-4 py-3 bg-gradient-to-r from-slate-900/50 to-black/50">
-          <div className="space-y-2">
-            <span className="text-white font-bold text-xs uppercase tracking-wider">
-              Last Match
-            </span>
-            <div className="grid grid-cols-2 gap-2">
-              {/* KDA */}
-              <div className="bg-black/60 rounded-lg p-2 border border-blue-500/30">
-                <div className="flex items-center space-x-1 mb-1">
-                  <Crosshair className="w-3 h-3 text-blue-400" />
-                  <span className="text-blue-400 text-xs font-medium">
-                    K/D/A
-                  </span>
+            <div>
+              <h2 className="text-xl font-bold text-white">
+                {playerData.nickname}
+              </h2>
+              <div className="text-center flex items-center gap-2">
+                <div className="text-lg font-bold text-blue-400">
+                  {csData?.faceit_elo}
                 </div>
-                <div className="text-white font-bold text-sm">
-                  {matchData.lastGameStas.Kills}/{matchData.lastGameStas.Deaths}
-                  /{matchData.lastGameStas.Assists}
-                </div>
-              </div>
-
-              {/* K/D Ratio */}
-              <div className="bg-black/60 rounded-lg p-2 border border-green-500/30">
-                <div className="flex items-center space-x-1 mb-1">
-                  <Target className="w-3 h-3 text-green-400" />
-                  <span className="text-green-400 text-xs font-medium">
-                    K/D
-                  </span>
-                </div>
-                <div className="text-white font-bold text-sm">
-                  {matchData.lastGameStas["K/D Ratio"]}
-                </div>
-              </div>
-
-              {/* Headshots */}
-              <div className="bg-black/60 rounded-lg p-2 border border-red-500/30">
-                <div className="flex items-center space-x-1 mb-1">
-                  <Skull className="w-3 h-3 text-red-400" />
-                  <span className="text-red-400 text-xs font-medium">HS%</span>
-                </div>
-                <div className="text-white font-bold text-sm">
-                  {matchData.lastGameStas["Headshots %"]}%
-                </div>
-              </div>
-
-              {/* ADR */}
-              <div className="bg-black/60 rounded-lg p-2 border border-yellow-500/30">
-                <div className="flex items-center space-x-1 mb-1">
-                  <Shield className="w-3 h-3 text-yellow-400" />
-                  <span className="text-yellow-400 text-xs font-medium">
-                    ADR
-                  </span>
-                </div>
-                <div className="text-white font-bold text-sm">
-                  {matchData.lastGameStas.ADR}
-                </div>
+                <div className="text-xs text-blue-300">ELO</div>
               </div>
             </div>
           </div>
+
+          {/* Skill Level */}
+          <div className="flex flex-col items-end">
+            {csData && (
+              <div className="flex items-center space-x-2">
+                <div className="flex gap-1">
+                  {statsData?.lifetime["Recent Results"].map(
+                    (result, index) => (
+                      <div
+                        key={index}
+                        className={`flex text-white rounded-xs w-6 h-6 items-center justify-center ${
+                          result === "1" ? " bg-green-600" : "bg-red-500"
+                        }`}
+                      >
+                        {result === "1" ? "W" : "L"}
+                      </div>
+                    )
+                  )}
+                </div>
+                <div className="relative w-10 h-10">
+                  {levelSvgs[csData.skill_level as keyof typeof levelSvgs]}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      )}
 
-      {/* Overall Stats - Horizontal Layout */}
-      {statsData && (
-        <div className="p-4 bg-black/70">
-          <span className="text-white font-bold text-xs uppercase tracking-wider block mb-2">
-            Overall (30 Days)
-          </span>
-          <div className="grid grid-cols-2 gap-2 text-center">
-            <div className="bg-gradient-to-r from-blue-500/20 to-blue-600/20 rounded-lg p-2 border border-blue-500/40">
-              <div className="text-blue-400 text-xs font-medium mb-1">
-                AVG K/D
-              </div>
-              <div className="text-white font-bold text-lg">
-                {matchData?.kd || statsData.lifetime["Average K/D Ratio"]}
-              </div>
-            </div>
+        <Separator className="bg-blue-500/20" />
 
-            <div
-              className={`rounded-lg p-2 border ${
-                Number(matchData?.winRate || statsData.lifetime["Win Rate %"]) >
-                50
-                  ? "bg-gradient-to-r from-green-500/20 to-green-600/20 border-green-500/40"
-                  : "bg-gradient-to-r from-red-500/20 to-red-600/20 border-red-500/40"
-              }`}
-            >
-              <div
-                className={`text-xs font-medium mb-1 ${
-                  Number(
-                    matchData?.winRate || statsData.lifetime["Win Rate %"]
-                  ) > 50
-                    ? "text-green-400"
-                    : "text-red-400"
-                }`}
+        {/* Stats Section */}
+
+        {/* ELO Progress Bar */}
+        {/* {eloProgress && (
+          <div className="px-4 pb-4">
+            <div className="relative h-1 bg-blue-900/50 rounded-full overflow-hidden">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${eloProgress.progress}%` }}
+                transition={{
+                  duration: 1.5,
+                  delay: 0.5,
+                  ease: "easeOut",
+                }}
+                className="h-full bg-gradient-to-r from-blue-500 via-sky-500 to-indigo-400 rounded-full relative"
               >
-                WIN %
-              </div>
-              <div className="text-white font-bold text-lg">
-                {matchData?.winRate || statsData.lifetime["Win Rate %"]}%
-              </div>
+                <motion.div
+                  animate={{
+                    x: [-100, 300],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "linear",
+                    delay: 2,
+                  }}
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transform -skew-x-12"
+                />
+              </motion.div>
             </div>
           </div>
-
-          {/* Secondary Stats */}
-          <div className="grid grid-cols-2 gap-2 mt-2">
-            <div className="bg-gradient-to-r from-red-500/20 to-red-600/20 rounded-lg p-2 border border-red-500/40">
-              <div className="text-red-400 text-xs font-medium mb-1">HS%</div>
-              <div className="text-white font-bold">
-                {matchData?.hsPercent ||
-                  statsData.lifetime["Average Headshots %"]}
-                %
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 rounded-lg p-2 border border-yellow-500/40">
-              <div className="text-yellow-400 text-xs font-medium mb-1">
-                STREAK
-              </div>
-              <div className="text-white font-bold">
-                {statsData.lifetime["Current Win Streak"]}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+        )} */}
+      </motion.div>
     </motion.div>
   );
 }

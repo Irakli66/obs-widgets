@@ -24,7 +24,7 @@ const navigationItems = [
     description: "View your competitive performance and statistics",
     icon: Trophy,
     color: "from-orange-500 to-red-500",
-    route: "/faceit-stats",
+    route: "/faceit-stats?compact=false",
     features: ["Real-time stats", "Match history", "Skill progression"],
   },
   {

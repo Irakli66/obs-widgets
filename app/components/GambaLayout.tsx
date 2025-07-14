@@ -4,11 +4,11 @@ import { motion } from "framer-motion";
 
 export default function GambaLayout() {
   return (
-    <div className="h-screen w-full relative overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="h-screen w-full relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
       {/* Background Effects */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-cyan-500/10 animate-pulse" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.1),transparent_50%)]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-sky-500/10 to-indigo-500/10 animate-pulse" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_50%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px] animate-pulse" />
       </div>
 
@@ -25,16 +25,16 @@ export default function GambaLayout() {
               initial={{ x: -50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="h-64 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
+              className="h-64 bg-slate-900/95 backdrop-blur-sm rounded-2xl border border-blue-500/20 shadow-2xl overflow-hidden"
             >
               <div className="h-full flex items-center justify-center relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-600/20 to-purple-600/20" />
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-sky-500/10 to-indigo-500/10" />
                 <div className="relative z-10 text-center">
                   <div className="text-4xl mb-2">📷</div>
                   <div className="text-lg text-white font-semibold mb-1">
                     Camera
                   </div>
-                  <div className="text-gray-400 text-sm">Face cam cutout</div>
+                  <div className="text-blue-300 text-sm">Face cam cutout</div>
                 </div>
               </div>
             </motion.div>
@@ -44,10 +44,10 @@ export default function GambaLayout() {
               initial={{ x: -50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="flex-1 bg-black/20 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
+              className="flex-1 bg-slate-900/95 backdrop-blur-sm rounded-2xl border border-blue-500/20 shadow-2xl overflow-hidden"
             >
               <div className="h-full flex items-center justify-center relative">
-                <div className="absolute inset-0 bg-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-sky-500/10 to-indigo-500/10" />
                 <div className="relative z-10 text-center"></div>
               </div>
             </motion.div>
@@ -60,9 +60,9 @@ export default function GambaLayout() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex-1 pt-15 px-5 pb-5"
           >
-            <div className="h-[820px] bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
+            <div className="h-[820px] bg-slate-900/95 backdrop-blur-sm rounded-2xl border border-blue-500/20 shadow-2xl overflow-hidden">
               <div className="h-full flex items-center justify-center relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-blue-600/20" />
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-sky-500/10 to-indigo-500/10" />
                 <div className="relative z-10 text-center"></div>
               </div>
             </div>
@@ -86,7 +86,7 @@ export default function GambaLayout() {
               delay: i * 1.5,
               ease: "easeInOut",
             }}
-            className="absolute bg-gradient-to-r from-purple-500 to-blue-500 rounded-full blur-sm"
+            className="absolute bg-gradient-to-r from-blue-500 to-sky-500 rounded-full blur-sm"
             style={{
               width: 20 + i * 10,
               height: 20 + i * 10,

@@ -108,10 +108,10 @@ export default function TopBar() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="w-full relative flex items-center justify-between px-4 py-2 bg-gradient-to-r from-slate-900/95 via-purple-900/95 to-slate-900/95 backdrop-blur-md border-b border-purple-500/20 shadow-2xl"
+        className="w-full relative flex items-center justify-between px-4 py-2 bg-gradient-to-r from-slate-900/95 via-blue-900/95 to-slate-900/95 backdrop-blur-md border-b border-blue-500/20 shadow-2xl"
       >
         {/* Animated background overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-cyan-500/10 animate-pulse" />
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-sky-500/10 to-indigo-500/10 animate-pulse" />
 
         {/* Left Section - Brand & Live Status */}
         <div className="flex items-center gap-4 z-10">
@@ -120,7 +120,7 @@ export default function TopBar() {
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
-            {/* <div className="w-8 h-8 bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-500 rounded-lg flex items-center justify-center shadow-lg shadow-purple-500/25">
+            {/* <div className="w-8 h-8 bg-gradient-to-br from-blue-500 via-sky-500 to-indigo-500 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/25">
             <span className="text-white font-bold text-sm">T</span>
           </div> */}
             <Image
@@ -140,14 +140,14 @@ export default function TopBar() {
             className={`flex items-center gap-2 px-3 py-1 rounded-full ${
               streamData.isLive
                 ? "bg-red-500/20 border border-red-500/40"
-                : "bg-purple-600/20 border border-purple-600/40"
+                : "bg-blue-600/20 border border-blue-600/40"
             }`}
             animate={streamData.isLive ? { scale: [1, 1.02, 1] } : {}}
             transition={{ duration: 2, repeat: Infinity }}
           >
             <div
               className={`w-2 h-2 rounded-full ${
-                streamData.isLive ? "bg-red-500" : "bg-purple-400"
+                streamData.isLive ? "bg-red-500" : "bg-blue-400"
               } ${streamData.isLive ? "animate-pulse" : ""}`}
             />
             <span className="text-white text-xs font-semibold">
@@ -162,7 +162,7 @@ export default function TopBar() {
             className="flex items-center gap-2 bg-black/40 px-3 py-1 rounded-lg backdrop-blur-sm border border-white/10"
             whileHover={{ scale: 1.05, backgroundColor: "rgba(0,0,0,0.6)" }}
           >
-            <Eye className="w-3 h-3 text-blue-400" />
+            <Eye className="w-3 h-3 text-sky-400" />
             <span className="text-white text-xs font-semibold">
               {streamData.viewers.toLocaleString()}
             </span>
@@ -240,18 +240,18 @@ export default function TopBar() {
           {/* Date & Time */}
           <div className="text-right">
             <div className="text-white text-xs font-bold">{formattedTime}</div>
-            <div className="text-purple-300 text-xs">{formattedDate}</div>
+            <div className="text-blue-300 text-xs">{formattedDate}</div>
           </div>
         </div>
 
         {/* Subtle animated border */}
         {/* <motion.div
-        className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500"
+        className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-500 via-sky-500 to-indigo-500"
         animate={{ width: ["0%", "100%", "0%"] }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       /> */}
       </motion.div>
-      <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-violet-200 p-4 rounded shadow text-center">
+      <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-200 p-4 rounded shadow text-center">
         Currently showing <strong>{isTwitch ? "Twitch" : "Kick"}</strong> stream
         data.
         <br />
