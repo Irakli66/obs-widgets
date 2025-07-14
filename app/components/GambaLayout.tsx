@@ -25,17 +25,10 @@ export default function GambaLayout() {
               initial={{ x: -50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="h-64 bg-slate-900/95 backdrop-blur-sm rounded-2xl border border-blue-500/20 shadow-2xl overflow-hidden"
+              className="h-64 bg-black/30 backdrop-blur-sm rounded-2xl border border-blue-500/20 shadow-2xl overflow-hidden"
             >
               <div className="h-full flex items-center justify-center relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-sky-500/10 to-indigo-500/10" />
-                <div className="relative z-10 text-center">
-                  <div className="text-4xl mb-2">📷</div>
-                  <div className="text-lg text-white font-semibold mb-1">
-                    Camera
-                  </div>
-                  <div className="text-blue-300 text-sm">Face cam cutout</div>
-                </div>
               </div>
             </motion.div>
 
@@ -44,7 +37,7 @@ export default function GambaLayout() {
               initial={{ x: -50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="flex-1 bg-slate-900/95 backdrop-blur-sm rounded-2xl border border-blue-500/20 shadow-2xl overflow-hidden"
+              className="flex-1 bg-black/30 backdrop-blur-sm rounded-2xl border border-blue-500/20 shadow-2xl overflow-hidden"
             >
               <div className="h-full flex items-center justify-center relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-sky-500/10 to-indigo-500/10" />
@@ -60,7 +53,7 @@ export default function GambaLayout() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex-1 pt-15 px-5 pb-5"
           >
-            <div className="h-[820px] bg-slate-900/95 backdrop-blur-sm rounded-2xl border border-blue-500/20 shadow-2xl overflow-hidden">
+            <div className="h-[820px] bg-black/30 backdrop-blur-sm rounded-2xl border border-blue-500/20 shadow-2xl overflow-hidden">
               <div className="h-full flex items-center justify-center relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-sky-500/10 to-indigo-500/10" />
                 <div className="relative z-10 text-center"></div>

@@ -196,7 +196,7 @@ export default function NowPlayingWidget() {
     <motion.div
       initial={{ opacity: 0, scale: 0.95, y: 20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
-      className="relative bg-slate-900/95 backdrop-blur-sm rounded-2xl p-6 border border-blue-500/20 shadow-2xl overflow-hidden"
+      className="relative bg-black/30 backdrop-blur-sm rounded-2xl p-6 border border-blue-500/20 shadow-2xl overflow-hidden"
     >
       {/* Animated background overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-sky-500/10 to-indigo-500/10" />
