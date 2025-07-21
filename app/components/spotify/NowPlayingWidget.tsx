@@ -175,7 +175,7 @@ export default function NowPlayingWidget() {
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="relative bg-slate-900/95 backdrop-blur-sm rounded-2xl p-6 border border-blue-500/20 shadow-2xl overflow-hidden"
+        className="relative min-h-50 bg-black/30 backdrop-blur-sm rounded-2xl p-6 border border-blue-500/20 shadow-2xl overflow-hidden"
       >
         <div className="absolute inset-0 bg-gradient-to-r from-slate-500/5 via-blue-500/5 to-slate-500/5" />
         <div className="relative z-10 flex items-center">
