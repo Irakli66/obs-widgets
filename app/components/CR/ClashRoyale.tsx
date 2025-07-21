@@ -15,23 +15,7 @@ export default function ClashRoyale() {
       {/* Main Content */}
       <div className="relative z-10 h-full flex">
         {/* Left Side - Mobile Screen */}
-        <div className="w-[550px] pt-15 px-5 pb-5 flex flex-col justify-center items-center">
-          <motion.div
-            initial={{ x: -50, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="w-[550px] h-full bg-black/30 backdrop-blur-sm rounded-[2.5rem] shadow-2xl overflow-hidden"
-          >
-            <div className="h-full flex items-center justify-center relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-sky-500/10 to-indigo-500/10" />
-              <div className="relative z-10 text-center">
-                <div className="text-white/70 text-sm font-medium">
-                  MOBILE GAMEPLAY
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
+        <div className="w-[550px] pt-15 px-5 pb-5 flex flex-col justify-center items-center"></div>
 
         {/* Right Side - Camera and Socials */}
         <div className=" pt-15 px-5 pb-5 flex flex-col justify-between">
