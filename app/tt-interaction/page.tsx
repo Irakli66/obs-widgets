@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 const items = [
   {
@@ -41,9 +42,11 @@ export default function TTInteractionPage() {
             transition={{ duration: 0.5 }}
             className="flex flex-col items-center text-center"
           >
-            <img
+            <Image
               src={current.image}
               alt={current.text}
+              width={160}
+              height={160}
               className="w-40 h-40 object-contain mb-4"
             />
 

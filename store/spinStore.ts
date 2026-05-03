@@ -1,10 +1,5 @@
 import { create } from "zustand";
-
-export type SpinOutcome = {
-  id: string;
-  label: string;
-  chance: number;
-};
+import type { SpinOutcome } from "@/lib/spin-config";
 
 export type SpinEvent = {
   id: string;
@@ -14,25 +9,32 @@ export type SpinEvent = {
 
 type SpinStore = {
   latestSpin: SpinEvent | null;
+  isPreparing: boolean;
   isSpinning: boolean;
   result: SpinOutcome | null;
   rotation: number;
+  spinDuration: number;
 
-  setLatestSpin: (spin: SpinEvent) => void;
-  startSpin: () => void;
+  setLatestSpin: (spin: SpinEvent | null) => void;
+  startPrepare: () => void;
+  startSpin: (duration?: number) => void;
   finishSpin: (outcome: SpinOutcome) => void;
   addRotation: (degrees: number) => void;
 };
 
 export const useSpinStore = create<SpinStore>((set) => ({
   latestSpin: null,
+  isPreparing: false,
   isSpinning: false,
   result: null,
   rotation: 0,
+  spinDuration: 3.6,
 
   setLatestSpin: (spin) => set({ latestSpin: spin }),
-  startSpin: () => set({ isSpinning: true, result: null }),
-  finishSpin: (outcome) => set({ isSpinning: false, result: outcome }),
+  startPrepare: () => set({ isPreparing: true, result: null }),
+  startSpin: (duration = 3.6) =>
+    set({ isPreparing: false, isSpinning: true, result: null, spinDuration: duration }),
+  finishSpin: (outcome) => set({ isPreparing: false, isSpinning: false, result: outcome }),
   addRotation: (degrees) =>
     set((state) => ({
       rotation: state.rotation + degrees,

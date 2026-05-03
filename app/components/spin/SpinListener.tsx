@@ -1,37 +1,114 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { createPusherClient } from "@/lib/pusher/pusher-client";
 import { useSpinStore, SpinEvent } from "@/store/spinStore";
+import {
+  getSpinReelPattern,
+  SPIN_REEL_REPEATS,
+  SPIN_TILE_GAP,
+  SPIN_TILE_WIDTH,
+} from "@/lib/spin-config";
 
 export default function SpinListener() {
   const setLatestSpin = useSpinStore((s) => s.setLatestSpin);
+  const startPrepare = useSpinStore((s) => s.startPrepare);
   const startSpin = useSpinStore((s) => s.startSpin);
   const finishSpin = useSpinStore((s) => s.finishSpin);
   const addRotation = useSpinStore((s) => s.addRotation);
+  const spinQueueRef = useRef<SpinEvent[]>([]);
+  const isProcessingRef = useRef(false);
+  const finishTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const prepareTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    const runNextSpin = () => {
+      if (isProcessingRef.current) return;
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current);
+        hideTimeoutRef.current = null;
+      }
+
+      const nextSpin = spinQueueRef.current.shift();
+      if (!nextSpin) return;
+
+      isProcessingRef.current = true;
+      setLatestSpin(nextSpin);
+      startPrepare();
+
+      const weightedPattern = getSpinReelPattern();
+      const matchingPatternIndexes = weightedPattern
+        .map((outcome, index) => ({ id: outcome.id, index }))
+        .filter((item) => item.id === nextSpin.outcome.id)
+        .map((item) => item.index);
+      const selectedPatternIndex =
+        matchingPatternIndexes[
+          Math.floor(Math.random() * Math.max(1, matchingPatternIndexes.length))
+        ];
+
+      const step = SPIN_TILE_WIDTH + SPIN_TILE_GAP;
+      const patternCount = weightedPattern.length;
+      const cycleSize = step * Math.max(1, patternCount);
+      const reelCycles = Math.max(1, Math.floor(SPIN_REEL_REPEATS * 0.08));
+      const extraCycles = Math.floor(Math.random() * 2);
+      const spinDuration = 3.4 + Math.random() * 0.45;
+      const prepareDuration = 950;
+      const fallbackExtraRotation = step * Math.max(1, patternCount) * 10;
+      prepareTimeoutRef.current = setTimeout(() => {
+        startSpin(spinDuration);
+        if (
+          selectedPatternIndex === undefined ||
+          Number.isNaN(selectedPatternIndex) ||
+          patternCount === 0
+        ) {
+          addRotation(fallbackExtraRotation);
+        } else {
+          const currentOffset = useSpinStore.getState().rotation;
+          const currentOffsetInCycle =
+            ((currentOffset % cycleSize) + cycleSize) % cycleSize;
+          const targetOffsetInCycle = selectedPatternIndex * step;
+          let alignDelta = targetOffsetInCycle - currentOffsetInCycle;
+          if (alignDelta < 0) alignDelta += cycleSize;
+          const deltaToTarget = cycleSize * (reelCycles + extraCycles) + alignDelta;
+
+          addRotation(deltaToTarget);
+        }
+      }, prepareDuration);
+
+      finishTimeoutRef.current = setTimeout(() => {
+        finishSpin(nextSpin.outcome);
+        isProcessingRef.current = false;
+        if (spinQueueRef.current.length > 0) {
+          runNextSpin();
+        } else {
+          hideTimeoutRef.current = setTimeout(() => {
+            setLatestSpin(null);
+          }, 1000);
+        }
+      }, Math.round((prepareDuration + spinDuration * 1000 + 150)));
+    };
+
     const pusher = createPusherClient();
     const channel = pusher.subscribe("spin-channel");
 
     channel.bind("spin-started", (spin: SpinEvent) => {
-      setLatestSpin(spin);
-      startSpin();
-
-      const extraRotation = 1440 + Math.floor(Math.random() * 720);
-      addRotation(extraRotation);
-
-      setTimeout(() => {
-        finishSpin(spin.outcome);
-      }, 4200);
+      spinQueueRef.current.push(spin);
+      runNextSpin();
     });
 
     return () => {
+      if (finishTimeoutRef.current) clearTimeout(finishTimeoutRef.current);
+      if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+      if (prepareTimeoutRef.current) clearTimeout(prepareTimeoutRef.current);
+      spinQueueRef.current = [];
+      isProcessingRef.current = false;
+      setLatestSpin(null);
       channel.unbind_all();
       pusher.unsubscribe("spin-channel");
       pusher.disconnect();
     };
-  }, [setLatestSpin, startSpin, finishSpin, addRotation]);
+  }, [setLatestSpin, startPrepare, startSpin, finishSpin, addRotation]);
 
   return null;
 }
