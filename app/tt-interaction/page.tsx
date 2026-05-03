@@ -22,7 +22,7 @@ export default function TTInteractionPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % items.length);
-    }, 3000); // change speed here
+    }, 5000); // change speed here
 
     return () => clearInterval(interval);
   }, []);
