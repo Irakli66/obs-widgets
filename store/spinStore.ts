@@ -20,6 +20,7 @@ type SpinStore = {
   startSpin: (duration?: number) => void;
   finishSpin: (outcome: SpinOutcome) => void;
   addRotation: (degrees: number) => void;
+  setRotation: (rotation: number) => void;
 };
 
 export const useSpinStore = create<SpinStore>((set) => ({
@@ -31,12 +32,25 @@ export const useSpinStore = create<SpinStore>((set) => ({
   spinDuration: 3.6,
 
   setLatestSpin: (spin) => set({ latestSpin: spin }),
-  startPrepare: () => set({ isPreparing: true, result: null }),
+  startPrepare: () =>
+    set({
+      isPreparing: true,
+      isSpinning: false,
+      result: null,
+    }),
   startSpin: (duration = 3.6) =>
-    set({ isPreparing: false, isSpinning: true, result: null, spinDuration: duration }),
-  finishSpin: (outcome) => set({ isPreparing: false, isSpinning: false, result: outcome }),
+    set({
+      isPreparing: false,
+      isSpinning: true,
+      result: null,
+      spinDuration: duration,
+    }),
+  finishSpin: (outcome) =>
+    set({ isPreparing: false, isSpinning: false, result: outcome }),
   addRotation: (degrees) =>
     set((state) => ({
       rotation: state.rotation + degrees,
     })),
+
+  setRotation: (rotation) => set({ rotation }),
 }));
