@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useSpinStore } from "@/store/spinStore";
 import {
@@ -10,11 +11,6 @@ import {
   SPIN_VIEWPORT_WIDTH,
   spinOutcomes,
 } from "@/lib/spin-config";
-
-const reelItems = Array.from({ length: SPIN_REEL_REPEATS }).flatMap(() =>
-  getSpinReelPattern(),
-);
-const centerSpacer = SPIN_VIEWPORT_WIDTH / 2 - SPIN_TILE_WIDTH / 2;
 
 function getTileTheme(id: string) {
   if (id === "try-again") {
@@ -44,7 +40,7 @@ function getTileTheme(id: string) {
   ];
 
   const idx = spinOutcomes.findIndex((outcome) => outcome.id === id);
-  return themes[idx % themes.length] ?? themes[0];
+  return themes[Math.max(0, idx % themes.length)] ?? themes[0];
 }
 
 export default function SpinWheel() {
@@ -53,11 +49,26 @@ export default function SpinWheel() {
   const isPreparing = useSpinStore((s) => s.isPreparing);
   const isSpinning = useSpinStore((s) => s.isSpinning);
   const latestSpin = useSpinStore((s) => s.latestSpin);
+  const setReel = useSpinStore((s) => s.setReel);
+  const reel = useSpinStore((s) => s.reel);
+
+  const reelItems = useMemo(() => {
+    return Array.from({ length: SPIN_REEL_REPEATS }).flatMap(() =>
+      getSpinReelPattern(),
+    );
+  }, []);
+
+  useEffect(() => {
+    setReel(reelItems);
+  }, [reelItems, setReel]);
 
   if (!latestSpin && !isSpinning) {
     return null;
   }
+
+  const centerSpacer = SPIN_VIEWPORT_WIDTH / 2 - SPIN_TILE_WIDTH / 2;
   const prepareAnimDuration = 0.9;
+  const visibleReel = reel.length > 0 ? reel : reelItems;
 
   return (
     <div className="relative flex w-full flex-col items-center justify-center gap-6">
@@ -83,6 +94,7 @@ export default function SpinWheel() {
             }}
             transition={{ duration: prepareAnimDuration, ease: "easeInOut" }}
           />
+
           <div className="text-2xl font-black uppercase tracking-wider text-white [text-shadow:0_2px_0_rgba(0,0,0,0.35)]">
             იღბლიანი დატრიალება!
           </div>
@@ -92,9 +104,11 @@ export default function SpinWheel() {
       {!isPreparing && (
         <>
           <div className="pointer-events-none absolute left-1/2 top-1/2 z-40 h-40 w-[4px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-500 shadow-[0_0_18px_rgba(239,68,68,0.95)]" />
+
           <div className="pointer-events-none absolute left-1/2 top-[calc(50%-76px)] z-40 -translate-x-1/2 text-4xl text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.95)]">
             ▼
           </div>
+
           <div
             className="relative overflow-hidden rounded-2xl border border-white/20 bg-black/70 p-6 shadow-[0_25px_90px_rgba(0,0,0,0.75)] backdrop-blur-sm"
             style={{ width: `${SPIN_VIEWPORT_WIDTH}px` }}
@@ -112,18 +126,21 @@ export default function SpinWheel() {
                 style={{ width: `${centerSpacer}px` }}
                 className="shrink-0"
               />
-              {reelItems.map((item, index) => {
+
+              {visibleReel.map((item, index) => {
                 const theme = getTileTheme(item.id);
+
                 return (
                   <div
                     key={`${item.id}-${index}`}
-                    className={`flex h-32 shrink-0 items-center justify-center rounded-xl border-2 px-5 text-center text-3xl font-black uppercase tracking-wide [text-shadow:0_2px_0_rgba(0,0,0,0.35)] ${theme.card} ${theme.glow}`}
+                    className={`flex h-32 shrink-0 items-center justify-center rounded-xl border-2 px-5 text-center text-2xl font-black uppercase tracking-wide [text-shadow:0_2px_0_rgba(0,0,0,0.35)] ${theme.card} ${theme.glow}`}
                     style={{ width: `${SPIN_TILE_WIDTH}px` }}
                   >
                     {item.label}
                   </div>
                 );
               })}
+
               <div
                 style={{ width: `${centerSpacer}px` }}
                 className="shrink-0"

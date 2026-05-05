@@ -8,7 +8,7 @@ export const spinOutcomes: SpinOutcome[] = [
   {
     id: "try-again",
     label: "სცადე ხელახლა",
-    chance: 70,
+    chance: 60,
   },
   {
     id: "pushups",
@@ -16,14 +16,29 @@ export const spinOutcomes: SpinOutcome[] = [
     chance: 10,
   },
   {
-    id: "close-game",
-    label: "გათიშე თამაში",
+    id: "flip-tablet",
+    label: "პლანშეტის ამობრუნება",
+    chance: 5,
+  },
+  {
+    id: "one-hand",
+    label: "ერთი ხელით თამაში",
     chance: 10,
   },
   {
-    id: "zoom-face",
-    label: "გაზუმე კამერა",
-    chance: 10,
+    id: "blind-game",
+    label: "15წმ თვალდახუჭული თამაში",
+    chance: 5,
+  },
+  {
+    id: "squat-game",
+    label: "ბუქნაობა და თამაში",
+    chance: 5,
+  },
+  {
+    id: "nose-play",
+    label: "ცხვირით თამაში",
+    chance: 5,
   },
 ];
 
