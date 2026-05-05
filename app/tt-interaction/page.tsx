@@ -8,7 +8,7 @@ const items = [
   {
     id: "hat",
     image: "/images/HatMustache.png",
-    text: "დატრიალება",
+    text: "ბორბლის დატრიალება",
   },
   {
     id: "helmet",
@@ -23,7 +23,7 @@ export default function TTInteractionPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % items.length);
-    }, 5000); // change speed here
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -47,10 +47,16 @@ export default function TTInteractionPage() {
               alt={current.text}
               width={160}
               height={160}
-              className="w-40 h-40 object-contain mb-4"
+              className="w-40 h-40 object-contain"
             />
 
-            <div className="text-white text-2xl font-bold drop-shadow-lg">
+            <div
+              className="text-white text-3xl font-bold tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+              style={{
+                WebkitTextStroke: "1px black",
+                fontFamily: "BPG Nino Mtavruli",
+              }}
+            >
               {current.text}
             </div>
           </motion.div>
