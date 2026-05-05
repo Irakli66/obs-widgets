@@ -90,6 +90,15 @@ export default function SpinListener() {
         () => {
           setWinningIndex(selectedIndex);
           finishSpin(nextSpin.outcome);
+          setWinningIndex(selectedIndex);
+          finishSpin(nextSpin.outcome);
+
+          if (nextSpin.outcome.voiceAudio) {
+            const voice = new Audio(nextSpin.outcome.voiceAudio);
+            voice.volume = 0.9;
+            voice.currentTime = 0;
+            voice.play().catch(() => {});
+          }
           isProcessingRef.current = false;
 
           const resultHoldDuration = 2500;
