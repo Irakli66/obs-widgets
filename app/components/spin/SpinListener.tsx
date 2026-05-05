@@ -10,6 +10,20 @@ import {
   SPIN_TILE_WIDTH,
 } from "@/lib/spin-config";
 
+function getBaitOffset(step: number, outcomeId: string) {
+  const shouldBait = Math.random() < 0.5;
+
+  if (!shouldBait) {
+    return Math.floor((Math.random() - 0.5) * step * 0.22);
+  }
+
+  if (outcomeId === "try-again") {
+    return Math.floor(step * 0.42);
+  }
+
+  return Math.floor((Math.random() - 0.5) * step * 0.5);
+}
+
 export default function SpinListener() {
   const setLatestSpin = useSpinStore((s) => s.setLatestSpin);
   const startPrepare = useSpinStore((s) => s.startPrepare);
@@ -46,8 +60,6 @@ export default function SpinListener() {
       const patternCount = weightedPattern.length;
       const cycleSize = step * Math.max(1, patternCount);
 
-      // Reset huge accumulated rotation back into one reel cycle.
-      // This prevents the finite rendered reel from moving fully out of view.
       const currentOffset = useSpinStore.getState().rotation;
       const normalizedOffset =
         ((currentOffset % cycleSize) + cycleSize) % cycleSize;
@@ -64,9 +76,9 @@ export default function SpinListener() {
           Math.floor(Math.random() * Math.max(1, matchingPatternIndexes.length))
         ];
 
-      const reelCycles = Math.max(1, Math.floor(SPIN_REEL_REPEATS * 0.08));
-      const extraCycles = Math.floor(Math.random() * 2);
-      const spinDuration = 3.4 + Math.random() * 0.45;
+      const reelCycles = Math.max(2, Math.floor(SPIN_REEL_REPEATS * 0.12));
+      const extraCycles = Math.floor(Math.random() * 3);
+      const spinDuration = 4.2 + Math.random() * 0.8;
       const prepareDuration = 950;
       const fallbackExtraRotation = cycleSize * 10;
 
@@ -81,10 +93,15 @@ export default function SpinListener() {
           addRotation(fallbackExtraRotation);
         } else {
           const currentOffsetInCycle = useSpinStore.getState().rotation;
-          const targetOffsetInCycle = selectedPatternIndex * step;
+          const baitOffset = getBaitOffset(step, nextSpin.outcome.id);
+
+          const targetOffsetInCycle = selectedPatternIndex * step + baitOffset;
 
           let alignDelta = targetOffsetInCycle - currentOffsetInCycle;
-          if (alignDelta < 0) alignDelta += cycleSize;
+
+          if (alignDelta < 0) {
+            alignDelta += cycleSize;
+          }
 
           const deltaToTarget =
             cycleSize * (reelCycles + extraCycles) + alignDelta;
@@ -106,7 +123,7 @@ export default function SpinListener() {
             }, 1000);
           }
         },
-        Math.round(prepareDuration + spinDuration * 1000 + 150),
+        Math.round(prepareDuration + spinDuration * 1000 + 200),
       );
     };
 

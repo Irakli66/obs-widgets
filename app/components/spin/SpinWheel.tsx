@@ -104,7 +104,7 @@ export default function SpinWheel() {
               animate={{ x: -rotation }}
               transition={{
                 duration: spinDuration,
-                ease: [0.16, 0.75, 0.24, 1],
+                ease: [0.08, 0.72, 0.12, 1],
               }}
               className="flex items-center"
               style={{ gap: `${SPIN_TILE_GAP}px` }}
