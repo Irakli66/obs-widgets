@@ -51,6 +51,7 @@ export default function SpinWheel() {
   const latestSpin = useSpinStore((s) => s.latestSpin);
   const setReel = useSpinStore((s) => s.setReel);
   const reel = useSpinStore((s) => s.reel);
+  const winningIndex = useSpinStore((s) => s.winningIndex);
 
   const reelItems = useMemo(() => {
     return Array.from({ length: SPIN_REEL_REPEATS }).flatMap(() =>
@@ -133,7 +134,11 @@ export default function SpinWheel() {
                 return (
                   <div
                     key={`${item.id}-${index}`}
-                    className={`flex h-32 shrink-0 items-center justify-center rounded-xl border-2 px-5 text-center text-2xl font-black uppercase tracking-wide [text-shadow:0_2px_0_rgba(0,0,0,0.35)] ${theme.card} ${theme.glow}`}
+                    className={`flex h-32 shrink-0 items-center justify-center rounded-xl border-2 px-5 text-center text-2xl font-black uppercase tracking-wide [text-shadow:0_2px_0_rgba(0,0,0,0.35)] ${
+                      winningIndex === index
+                        ? "scale-110 border-emerald-400 ring-2 ring-emerald-300/60 backdrop-brightness-110 [animation:glowPulseGreen_1.6s_ease-in-out_infinite]"
+                        : ""
+                    } ${theme.card} ${theme.glow}`}
                     style={{ width: `${SPIN_TILE_WIDTH}px` }}
                   >
                     {item.label}

@@ -11,6 +11,7 @@ export default function SpinListener() {
   const startSpin = useSpinStore((s) => s.startSpin);
   const finishSpin = useSpinStore((s) => s.finishSpin);
   const setRotation = useSpinStore((s) => s.setRotation);
+  const setWinningIndex = useSpinStore((s) => s.setWinningIndex);
 
   const spinQueueRef = useRef<SpinEvent[]>([]);
   const isProcessingRef = useRef(false);
@@ -87,15 +88,21 @@ export default function SpinListener() {
 
       finishTimeoutRef.current = setTimeout(
         () => {
+          setWinningIndex(selectedIndex);
           finishSpin(nextSpin.outcome);
           isProcessingRef.current = false;
 
+          const resultHoldDuration = 2500;
+
           if (spinQueueRef.current.length > 0) {
-            runNextSpin();
+            hideTimeoutRef.current = setTimeout(() => {
+              runNextSpin();
+            }, resultHoldDuration);
           } else {
             hideTimeoutRef.current = setTimeout(() => {
               setLatestSpin(null);
-            }, 1000);
+              setWinningIndex(null);
+            }, resultHoldDuration);
           }
         },
         Math.round(prepareDuration + spinDuration * 1000 + 150),

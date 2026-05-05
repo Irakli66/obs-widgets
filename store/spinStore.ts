@@ -15,6 +15,8 @@ type SpinStore = {
   rotation: number;
   spinDuration: number;
   reel: SpinOutcome[];
+  winningIndex: number | null;
+  setWinningIndex: (index: number | null) => void;
 
   setLatestSpin: (spin: SpinEvent | null) => void;
   startPrepare: () => void;
@@ -33,14 +35,16 @@ export const useSpinStore = create<SpinStore>((set) => ({
   rotation: 0,
   spinDuration: 3.6,
   reel: [],
+  winningIndex: null,
 
   setLatestSpin: (spin) => set({ latestSpin: spin }),
-
+  setWinningIndex: (index) => set({ winningIndex: index }),
   startPrepare: () =>
     set({
       isPreparing: true,
       isSpinning: false,
       result: null,
+      winningIndex: null,
     }),
 
   startSpin: (duration = 3.6) =>

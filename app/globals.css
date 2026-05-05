@@ -149,3 +149,21 @@
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
+
+@keyframes glowPulseGreen {
+  0% {
+    box-shadow:
+      0 0 12px rgba(16, 185, 129, 0.6),
+      0 0 24px rgba(16, 185, 129, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 30px rgba(16, 185, 129, 1),
+      0 0 70px rgba(16, 185, 129, 0.6);
+  }
+  100% {
+    box-shadow:
+      0 0 12px rgba(16, 185, 129, 0.6),
+      0 0 24px rgba(16, 185, 129, 0.4);
+  }
+}
