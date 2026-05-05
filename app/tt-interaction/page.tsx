@@ -51,10 +51,19 @@ export default function TTInteractionPage() {
             />
 
             <div
-              className="text-white text-3xl font-bold tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+              className="text-white text-2xl font-bold tracking-[0.05em]"
               style={{
-                WebkitTextStroke: "1px black",
                 fontFamily: "BPG Nino Mtavruli",
+                textShadow: `
+      2px 2px 0 #000,
+      -2px 2px 0 #000,
+      2px -2px 0 #000,
+      -2px -2px 0 #000,
+      0px 2px 0 #000,
+      2px 0px 0 #000,
+      -2px 0px 0 #000,
+      0px -2px 0 #000
+    `,
               }}
             >
               {current.text}
