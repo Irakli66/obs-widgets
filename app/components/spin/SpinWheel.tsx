@@ -11,9 +11,8 @@ import {
   spinOutcomes,
 } from "@/lib/spin-config";
 
-const weightedPattern = getSpinReelPattern();
 const reelItems = Array.from({ length: SPIN_REEL_REPEATS }).flatMap(() =>
-  weightedPattern.map((outcome) => outcome),
+  getSpinReelPattern(),
 );
 const centerSpacer = SPIN_VIEWPORT_WIDTH / 2 - SPIN_TILE_WIDTH / 2;
 
