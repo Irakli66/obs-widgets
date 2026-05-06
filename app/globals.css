@@ -167,3 +167,10 @@
       0 0 24px rgba(16, 185, 129, 0.4);
   }
 }
+
+@font-face {
+  font-family: "BPG Nino Mtavruli";
+  src: url("/fonts/bpg_nino_mtavruli_bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
