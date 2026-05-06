@@ -9,7 +9,7 @@ export const spinOutcomes: SpinOutcome[] = [
   {
     id: "try-again",
     label: "სცადე ხელახლა",
-    chance: 60,
+    chance: 55,
     voiceAudio: "/sounds/fail.mp3",
   },
   {
@@ -39,7 +39,7 @@ export const spinOutcomes: SpinOutcome[] = [
   {
     id: "squat-game",
     label: "ბუქნაობა და თამაში",
-    chance: 5,
+    chance: 10,
     voiceAudio: "/sounds/squatGame.mp3",
   },
   {
