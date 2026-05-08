@@ -19,17 +19,29 @@ export const spinOutcomes: SpinOutcome[] = [
     voiceAudio: "/sounds/pushups.mp3",
   },
   {
-    id: "flip-tablet",
-    label: "პლანშეტის ამობრუნება",
+    id: "bridge-spam",
+    label: "ხიდზე გასპამვა",
     chance: 5,
-    voiceAudio: "/sounds/flipTablet.mp3",
+    // voiceAudio: "/sounds/flipTablet.mp3",
   },
+  // {
+  //   id: "flip-tablet",
+  //   label: "პლანშეტის ამობრუნება",
+  //   chance: 5,
+  //   voiceAudio: "/sounds/flipTablet.mp3",
+  // },
   {
-    id: "one-hand",
-    label: "ერთი ხელით თამაში",
+    id: "close-game",
+    label: "თამაშის გათიშვა",
     chance: 10,
-    voiceAudio: "/sounds/oneHand.mp3",
+    // voiceAudio: "/sounds/oneHand.mp3",
   },
+  // {
+  //   id: "one-hand",
+  //   label: "ერთი ხელით თამაში",
+  //   chance: 10,
+  //   voiceAudio: "/sounds/oneHand.mp3",
+  // },
   {
     id: "blind-game",
     label: "15წმ თვალდახუჭული თამაში",
@@ -43,11 +55,17 @@ export const spinOutcomes: SpinOutcome[] = [
     voiceAudio: "/sounds/squatGame.mp3",
   },
   {
-    id: "nose-play",
-    label: "ცხვირით თამაში",
+    id: "no-headphones",
+    label: "ყურსასმენების გარეშე",
     chance: 5,
-    voiceAudio: "/sounds/noseGame.mp3",
+    // voiceAudio: "/sounds/noseGame.mp3",
   },
+  // {
+  //   id: "nose-play",
+  //   label: "ცხვირით თამაში",
+  //   chance: 5,
+  //   voiceAudio: "/sounds/noseGame.mp3",
+  // },
 ];
 
 export const SPIN_TILE_WIDTH = 180;
