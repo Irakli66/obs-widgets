@@ -22,7 +22,7 @@ export const spinOutcomes: SpinOutcome[] = [
     id: "bridge-spam",
     label: "ხიდზე გასპამვა",
     chance: 5,
-    // voiceAudio: "/sounds/flipTablet.mp3",
+    voiceAudio: "/sounds/bridgeSpam.mp3",
   },
   // {
   //   id: "flip-tablet",
@@ -34,7 +34,7 @@ export const spinOutcomes: SpinOutcome[] = [
     id: "close-game",
     label: "თამაშის გათიშვა",
     chance: 10,
-    // voiceAudio: "/sounds/oneHand.mp3",
+    voiceAudio: "/sounds/closeGame.mp3",
   },
   // {
   //   id: "one-hand",
@@ -58,7 +58,7 @@ export const spinOutcomes: SpinOutcome[] = [
     id: "no-headphones",
     label: "ყურსასმენების გარეშე",
     chance: 5,
-    // voiceAudio: "/sounds/noseGame.mp3",
+    voiceAudio: "/sounds/noHeadphones.mp3",
   },
   // {
   //   id: "nose-play",
