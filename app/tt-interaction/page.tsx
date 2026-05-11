@@ -13,7 +13,7 @@ const items = [
   {
     id: "helmet",
     image: "/images/RacingHelmet.png",
-    text: "დექის მოთხოვნა",
+    text: "დექის მოთხ.",
   },
 ];
 
@@ -51,7 +51,7 @@ export default function TTInteractionPage() {
             />
 
             <div
-              className="text-white text-2xl font-bold tracking-[0.05em]"
+              className="text-white text-3xl font-bold tracking-[0.05em]"
               style={{
                 fontFamily: "BPG Nino Mtavruli",
                 textShadow: `
